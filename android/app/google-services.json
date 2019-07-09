@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "949917907805",
+    "firebase_url": "https://jrmapp-fc4a5.firebaseio.com",
+    "project_id": "jrmapp-fc4a5",
+    "storage_bucket": "jrmapp-fc4a5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:949917907805:android:623cae3175f5fdfb",
+        "android_client_info": {
+          "package_name": "jrm.com"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "949917907805-fpt395nekl6pt3apk6gv447thv4f19eq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "jrm.com",
+            "certificate_hash": "70381d070ecf3c750bff28d91274f3c267c74bae"
+          }
+        },
+        {
+          "client_id": "949917907805-0i47fqbl5l5s68ppp1kcoqbr8vtfo8vj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHzDDMjJQycRzatNdNIhRTPZZNeKqJKzY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "949917907805-0i47fqbl5l5s68ppp1kcoqbr8vtfo8vj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
