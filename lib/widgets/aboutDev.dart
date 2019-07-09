@@ -1,7 +1,6 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:jrm/util/app_colors.dart';
 import 'package:jrm/util/textStyle.dart';
 import 'package:jrm/widgets/tile.dart';
@@ -54,7 +53,7 @@ class _AboutDevState extends State<AboutDev> {
               ),
             ),
             Expanded(
-              child: StaggeredGridView.count(
+              child: GridView.count(
                 crossAxisCount: 2,
                 children: <Widget>[
                   Hero(
@@ -153,10 +152,6 @@ class _AboutDevState extends State<AboutDev> {
                     ),
                     onTap: () {},
                   ),
-                ],
-                staggeredTiles: [
-                  StaggeredTile.extent(2, 270.0),
-                  StaggeredTile.extent(2, 480.0),
                 ],
               ),
             ),
