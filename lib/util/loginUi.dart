@@ -7,7 +7,7 @@ import 'package:jrm/util/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginUI extends StatelessWidget {
-  FirebaseMessaging firebaseMessaging;
+ final FirebaseMessaging firebaseMessaging= FirebaseMessaging();
 
   void _saveSharedprefs(String key, dynamic value) async {
     final prefs = await SharedPreferences.getInstance();
@@ -16,7 +16,6 @@ class LoginUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    firebaseMessaging = FirebaseMessaging();
     return Column(
       children: <Widget>[
         Padding(
