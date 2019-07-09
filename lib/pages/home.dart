@@ -8,8 +8,10 @@ import 'package:jrm/pages/compass.dart';
 import 'package:jrm/pages/profile.dart';
 import 'package:jrm/util/connectivity.dart';
 import 'package:jrm/util/textStyle.dart';
+import 'package:jrm/widgets/alert.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 var cardAspectRatio = 12.0 / 16.0;
@@ -59,6 +61,18 @@ class _HomeState extends State<Home> {
     }
   }
 
+  _firstVisit() async {
+    SharedPreferences preference = await SharedPreferences.getInstance();
+    bool _seen = (preference.getBool('seen') ?? false);
+    _versionCheck();
+    if (!_seen) {
+      preference.setBool('seen', true);
+      Future.delayed(Duration(seconds: 5)).whenComplete(() {
+        _alertDialog(context);
+      });
+    }
+  }
+
   @override
   void initState() {
     FirebaseMessaging messaging = FirebaseMessaging();
@@ -74,7 +88,7 @@ class _HomeState extends State<Home> {
         return null;
       },
     );
-    _versionCheck();
+    _firstVisit();
   }
 
   @override
@@ -209,6 +223,14 @@ class _HomeState extends State<Home> {
       backgroundColor: color == null ? Colors.red[300] : color,
       duration: Duration(seconds: 2),
     ));
+  }
+
+  _alertDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return BeautifulAlertDialog();
+        });
   }
 }
 

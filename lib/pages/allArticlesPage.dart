@@ -17,10 +17,6 @@ class _AllArticlesPageState extends State<AllArticlesPage> {
 
   @override
   Widget build(BuildContext context) {
-     _previous = false;
-      _fetching = false;
-      _moreButtonActive = false;
-      _prevButtonActive = false;
     return Scaffold(
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,

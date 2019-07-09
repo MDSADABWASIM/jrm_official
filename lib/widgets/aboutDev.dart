@@ -54,7 +54,7 @@ class _AboutDevState extends State<AboutDev> {
             ),
             Expanded(
               child: GridView.count(
-                crossAxisCount: 2,
+                crossAxisCount: 1,
                 children: <Widget>[
                   Hero(
                     tag: 'tile2',
@@ -86,6 +86,9 @@ class _AboutDevState extends State<AboutDev> {
                             overflow: TextOverflow.fade,
                             maxLines: 1,
                           ),
+                          SizedBox(
+                            height: 25.0,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -98,6 +101,9 @@ class _AboutDevState extends State<AboutDev> {
                                 ),
                                 onPressed: () => launchURL(
                                     'https://api.whatsapp.com/send?phone=+918210296495'),
+                              ),
+                              SizedBox(
+                                width: 15.0,
                               ),
                               IconButton(
                                 icon: Icon(
@@ -155,6 +161,7 @@ class _AboutDevState extends State<AboutDev> {
                 ],
               ),
             ),
+            SizedBox(height: 25.0),
           ],
         ),
       ),

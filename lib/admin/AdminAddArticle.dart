@@ -184,6 +184,7 @@ class PostArticleState extends State<PostArticle> {
         'title': _postTitleController.text.toString(),
         'desc': _postDescController.text.toString(),
         'author': _nameController.text.toString(),
+        'tag':''
       });
     }).whenComplete(() {
       Navigator.pop(context, 'success');

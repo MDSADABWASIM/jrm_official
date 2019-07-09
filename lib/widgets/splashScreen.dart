@@ -13,6 +13,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  
   Future checkFirstSeen() async {
     SharedPreferences preference = await SharedPreferences.getInstance();
     bool _seen = (preference.getBool('seen') ?? false);
