@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:sensors/sensors.dart';
 import 'package:flutter_compass/flutter_compass.dart';
@@ -130,7 +131,7 @@ class _CompassState extends State<Compass> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(Icons.keyboard_arrow_up,color: Colors.white),
+            Icon(EvaIcons.arrowheadUpOutline,color: Colors.white),
             SizedBox(width: 15),
             Text('swipe up to see weather info & hijri date',style: TextStyle(color: Colors.white,fontFamily:  'Calibre-Semibold',fontSize: 16),)
           ],

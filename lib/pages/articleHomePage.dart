@@ -24,7 +24,7 @@ class _ArticleHomePageState extends State<ArticleHomePage>
   Query query;
   List<DocumentSnapshot> documents = [];
   PageController controller;
-  var currentPage = 0;
+  double currentPage = 0;
   int length;
 
   _sharer() {
@@ -43,7 +43,7 @@ class _ArticleHomePageState extends State<ArticleHomePage>
     _menuController = new MenuController(vsync: this);
     controller = PageController(initialPage: documents.length - 1);
     controller.addListener(() {
-      int next = controller.page.round().toInt();
+      double next = controller.page;
       if (currentPage != next) {
         setState(() {
           currentPage = next;
