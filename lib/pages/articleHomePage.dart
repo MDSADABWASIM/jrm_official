@@ -21,6 +21,7 @@ class ArticleHomePage extends StatefulWidget {
 class _ArticleHomePageState extends State<ArticleHomePage>
     with TickerProviderStateMixin {
   MenuController _menuController;
+  Query query;
   List<DocumentSnapshot> documents = [];
   PageController controller;
   var currentPage = 0;
@@ -35,33 +36,21 @@ class _ArticleHomePageState extends State<ArticleHomePage>
 
   @override
   void initState() {
+    query = Firestore.instance
+        .collection('Articles')
+        .limit(10)
+        .orderBy('createdAt', descending: true);
     _menuController = new MenuController(vsync: this);
     controller = PageController(initialPage: documents.length - 1);
     controller.addListener(() {
-      int next = controller.page.round();
+      int next = controller.page.round().toInt();
       if (currentPage != next) {
         setState(() {
           currentPage = next;
         });
       }
     });
-    _getData();
     super.initState();
-  }
-
-  _getData() async {
-    QuerySnapshot query = await Firestore.instance
-        .collection('Articles')
-        .limit(10)
-        .orderBy('createdAt', descending: true)
-        .getDocuments();
-    int length = query.documents.length ?? 0;
-    if (length > 0) {
-      setState(() {
-        documents = query.documents;
-        // currentPage = documents.length - 1;
-      });
-    }
   }
 
   @override
@@ -132,142 +121,152 @@ class _ArticleHomePageState extends State<ArticleHomePage>
                 end: Alignment.topCenter,
                 tileMode: TileMode.clamp)),
         child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 12.0, right: 12.0, top: 15.0, bottom: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(
-                          Icons.sort,
-                          color: Colors.white,
-                          size: 30.0,
-                        ),
-                        onPressed: () {
-                          _menuController.openMenu(true);
-                        },
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.search,
-                          color: Colors.white,
-                          size: 30.0,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).push(CupertinoPageRoute(
-                            builder: (context) => AllArticlesPage(),
-                          ));
-                        },
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text("Articles",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 40.0,
-                            fontFamily: "Calibre-Semibold",
-                            letterSpacing: 1.0,
-                          )),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xFFff6e6e),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        child: Center(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 22.0, vertical: 6.0),
-                            child: Text("New",
-                                style: TextStyle(color: Colors.white)),
+            backgroundColor: Colors.transparent,
+            body: StreamBuilder(
+              stream: query.snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData &&
+                    snapshot.data.documents.length != null) {
+                  documents = snapshot.data.documents;
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 12.0, right: 12.0, top: 15.0, bottom: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              IconButton(
+                                icon: Icon(
+                                  Icons.sort,
+                                  color: Colors.white,
+                                  size: 30.0,
+                                ),
+                                onPressed: () {
+                                  _menuController.openMenu(true);
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.search,
+                                  color: Colors.white,
+                                  size: 30.0,
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).push(CupertinoPageRoute(
+                                    builder: (context) => AllArticlesPage(),
+                                  ));
+                                },
+                              )
+                            ],
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 15.0,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(CupertinoPageRoute(
-                            builder: (context) => AllArticlesPage(),
-                          ));
-                        },
-                        child: Text("see more",
-                            style: TextStyle(
-                                color: Colors.blueAccent, fontSize: 16)),
-                      )
-                    ],
-                  ),
-                ),
-                Stack(
-                  children: <Widget>[
-                    CardScrollWidget(currentPage, documents),
-                    Positioned.fill(
-                      child: PageView.builder(
-                        itemCount: documents.length,
-                        controller: controller,
-                        reverse: true,
-                        itemBuilder: (context, index) {
-                          return SizedBox();
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: RaisedButton(
-                      splashColor: Colors.yellow,
-                      onPressed: () {
-                        Navigator.of(context).push(CupertinoPageRoute(
-                          builder: (context) => ArticleDetail(
-                                document:
-                                    documents[currentPage.round().toInt()],
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text("Articles",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 40.0,
+                                    fontFamily: "Calibre-Semibold",
+                                    letterSpacing: 1.0,
+                                  )),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20.0),
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFff6e6e),
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                child: Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 22.0, vertical: 6.0),
+                                    child: Text("New",
+                                        style: TextStyle(color: Colors.white)),
+                                  ),
+                                ),
                               ),
-                        ));
-                      },
-                      child: Text("Read this article",
-                          style: TextStyle(color: Colors.white)),
-                      color: Colors.blueAccent,
-                      shape: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
+                              SizedBox(
+                                width: 15.0,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(CupertinoPageRoute(
+                                    builder: (context) => AllArticlesPage(),
+                                  ));
+                                },
+                                child: Text("see more",
+                                    style: TextStyle(
+                                        color: Colors.blueAccent,
+                                        fontSize: 16)),
+                              )
+                            ],
+                          ),
+                        ),
+                        Stack(
+                          children: <Widget>[
+                            CardScrollWidget(currentPage, documents),
+                            Positioned.fill(
+                              child: PageView.builder(
+                                itemCount: documents.length,
+                                controller: controller,
+                                reverse: true,
+                                itemBuilder: (context, index) {
+                                  return SizedBox();
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: RaisedButton(
+                              splashColor: Colors.yellow,
+                              onPressed: () {
+                                Navigator.of(context).push(CupertinoPageRoute(
+                                  builder: (context) => ArticleDetail(
+                                        document: documents[
+                                            currentPage.round().toInt()],
+                                      ),
+                                ));
+                              },
+                              child: Text("Read this article",
+                                  style: TextStyle(color: Colors.white)),
+                              color: Colors.blueAccent,
+                              shape: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20)
+                      ],
                     ),
-                  ),
-                ),
-                SizedBox(height: 20)
-              ],
-            ),
-          ),
-        ),
+                  );
+                } else
+                  return Center(child: CircularProgressIndicator());
+              },
+            )),
       ),
     );
   }
 }
 
 class CardScrollWidget extends StatelessWidget {
-final currentPage;//NOTE: if doesn't work remove final
- final List<DocumentSnapshot> docs;
+  final currentPage;
+  final List<DocumentSnapshot> docs;
   final padding = 20.0;
   final verticalInset = 20.0;
 
