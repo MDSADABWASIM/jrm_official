@@ -142,7 +142,7 @@ class SettingState extends State<Setting> {
                       style: TextStyle(color: Colors.blue),
                       text: 'Send an E-mail' + "\n\n",
                       url:
-                          'mailto:jrm78692?subject=Feedback&body=Feedback for App'),
+                          'mailto:jrm78692@gmail.com?subject=Feedback&body=Feedback for App'),
                 ])))
       ],
     );
