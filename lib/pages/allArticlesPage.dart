@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:jrm/widgets/card.dart';
@@ -9,38 +10,79 @@ class AllArticlesPage extends StatefulWidget {
 
 class _AllArticlesPageState extends State<AllArticlesPage> {
   DocumentSnapshot _lastDocument, _firstDocument;
+  final StreamController<bool> _prevStream = StreamController<bool>();
+  final StreamController<bool> _fetchingStream = StreamController<bool>();
+  final StreamController<bool> _moreButtonStreaam = StreamController<bool>();
+  final StreamController<bool> _prevButtonStream = StreamController<bool>();
   bool _previous = false,
       _fetching = false,
-      _moreButtonActive = true,
+      _moreButtonActive = false,
       _prevButtonActive = false;
   int length = 10;
 
   @override
+  void initState() {
+    super.initState();
+    _prevStream.add(false);
+    _fetchingStream.add(false);
+    _moreButtonStreaam.add(true);
+    _prevButtonStream.add(false);
+  }
+
+  @override
+  void dispose() {
+    _prevStream.close();
+    _fetchingStream.close();
+    _moreButtonStreaam.close();
+    _prevButtonStream.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+     if (_prevButtonActive) {
+      _prevButtonStream.add(false);
+    }
+      _moreButtonStreaam.add(true);
+    _prevStream.add(false);
+    _fetchingStream.add(false);
+
     return Scaffold(
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          _prevButtonActive
-              ? FloatingActionButton(
-                  heroTag: null,
-                  child: Icon(Icons.navigate_before, color: Colors.white),
-                  backgroundColor: Color(0xFF1b1e44),
-                  onPressed: () =>
-                      _prevButtonActive ? _goToPrevPage() : SizedBox(),
-                )
-              : SizedBox(),
+          StreamBuilder(
+            stream: _prevButtonStream.stream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) _prevButtonActive = snapshot.data;
+              return _prevButtonActive
+                  ? FloatingActionButton(
+                      heroTag: null,
+                      child: Icon(Icons.navigate_before, color: Colors.white),
+                      backgroundColor: Color(0xFF1b1e44),
+                      onPressed: () =>
+                          _prevButtonActive ? _goToPrevPage() : SizedBox(),
+                    )
+                  : SizedBox();
+            },
+          ),
           SizedBox(height: 20),
-          _moreButtonActive
-              ? FloatingActionButton(
-                  heroTag: null,
-                  child: Icon(Icons.navigate_next, color: Colors.white),
-                  backgroundColor: Color(0xFF1b1e44),
-                  onPressed: () =>
-                      _moreButtonActive ? _goToNextPage() : SizedBox(),
-                )
-              : SizedBox(),
+          StreamBuilder(
+            stream: _moreButtonStreaam.stream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) _moreButtonActive = snapshot.data;
+              return _moreButtonActive
+                  ? FloatingActionButton(
+                      heroTag: null,
+                      child: Icon(Icons.navigate_next, color: Colors.white),
+                      backgroundColor: Color(0xFF1b1e44),
+                      onPressed: () =>
+                          _moreButtonActive ? _goToNextPage() : SizedBox(),
+                    )
+                  : SizedBox();
+            },
+          ),
         ],
       ),
       appBar: AppBar(title: Text('Articles')),
@@ -52,9 +94,7 @@ class _AllArticlesPageState extends State<AllArticlesPage> {
     return Flex(
       direction: Axis.vertical,
       children: <Widget>[
-         Cards(
-            document: document
-          ),
+        Cards(document: document),
       ],
     );
   }
@@ -74,7 +114,7 @@ class _AllArticlesPageState extends State<AllArticlesPage> {
           return Center(child: CircularProgressIndicator());
         else
           snapshot.data.documents.length < length
-              ? _moreButtonActive = false
+              ? _moreButtonStreaam.add(false)
               : SizedBox();
         _lastDocument = snapshot.data.documents.last;
         _firstDocument = snapshot.data.documents.first;
@@ -102,7 +142,7 @@ class _AllArticlesPageState extends State<AllArticlesPage> {
           return Center(child: CircularProgressIndicator());
         else
           snapshot.data.documents.length < length
-              ? _prevButtonActive = false
+              ? _prevButtonStream.add(false)
               : SizedBox();
         _lastDocument = snapshot.data.documents.last;
         _firstDocument = snapshot.data.documents.first;
@@ -130,7 +170,7 @@ class _AllArticlesPageState extends State<AllArticlesPage> {
           return Center(child: CircularProgressIndicator());
         else
           snapshot.data.documents.length < length
-              ? _moreButtonActive = false
+              ? _moreButtonStreaam.add(false)
               : SizedBox();
         _lastDocument = snapshot.data.documents.last;
         _firstDocument = snapshot.data.documents.first;
@@ -144,27 +184,35 @@ class _AllArticlesPageState extends State<AllArticlesPage> {
   }
 
   _putInBody() {
-    if (_fetching) {
-      return _fetchFromLast();
-    } else if (_previous) {
-      return _goToPrev();
-    } else
-      return _firestoreDataList();
+    return StreamBuilder(
+      stream: _fetchingStream.stream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) _fetching = snapshot.data;
+        return StreamBuilder(
+          stream: _prevStream.stream,
+          builder: (context, snapshot2) {
+            if (snapshot2.hasData) _previous = snapshot2.data;
+            if (_fetching) {
+              return _fetchFromLast();
+            } else if (_previous) {
+              return _goToPrev();
+            } else
+              return _firestoreDataList();
+          },
+        );
+      },
+    );
   }
 
   _goToNextPage() {
-    setState(() {
-      _fetching = true;
-      _prevButtonActive = true;
-      _previous = false;
-    });
+    _fetchingStream.add(true);
+    _prevButtonStream.add(true);
+    _prevStream.add(false);
   }
 
   _goToPrevPage() {
-    setState(() {
-      _moreButtonActive = true;
-      _fetching = false;
-      _previous = true;
-    });
+    _moreButtonStreaam.add(true);
+    _fetchingStream.add(false);
+    _prevStream.add(true);
   }
 }
