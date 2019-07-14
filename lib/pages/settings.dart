@@ -1,10 +1,15 @@
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:jrm/models/privacyPolicy.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:package_info/package_info.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart' as urlLauncher;
+import 'package:http/http.dart' as http;
 
 class Setting extends StatefulWidget {
   @override
@@ -14,8 +19,11 @@ class Setting extends StatefulWidget {
 }
 
 class SettingState extends State<Setting> {
-  bool _notificationEnabled = false;
+  bool _notificationEnabled = false,
+      azanNotificationEnabled = false,
+      allNotificationEnabled = false;
   FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   String version;
   _divider() {
     return Divider(height: 10);
@@ -23,8 +31,17 @@ class SettingState extends State<Setting> {
 
   @override
   void initState() {
-    _getSharedprefs('notifs');
+    _getSharedprefs();
     _getVersion();
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    var initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsIOS = IOSInitializationSettings(
+        onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+    var initializationSettings = InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: onSelectNotification);
     super.initState();
   }
 
@@ -42,6 +59,24 @@ class SettingState extends State<Setting> {
         children: <Widget>[
           Text('Notify me on new articles', style: TextStyle(fontSize: 18.0)),
           _switchForNotification()
+        ],
+      ),
+      _divider(),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text('Notify me on Namaz ', style: TextStyle(fontSize: 18.0)),
+          _switchForCancelAzanNotification(),
+        ],
+      ),
+      _divider(),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text('All notifications', style: TextStyle(fontSize: 18.0)),
+          _switchForCancelAllNotification(),
         ],
       ),
       _divider(),
@@ -85,10 +120,12 @@ class SettingState extends State<Setting> {
     prefs.setBool('$key', value);
   }
 
-  void _getSharedprefs(String notifs) async {
+  void _getSharedprefs() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _notificationEnabled = prefs.getBool('$notifs') ?? true;
+      _notificationEnabled = prefs.getBool('notifs') ?? false;
+      azanNotificationEnabled = prefs.getBool('AzanNotifs') ?? false;
+      allNotificationEnabled = prefs.getBool('LocalNotifs') ?? false;
     });
   }
 
@@ -104,6 +141,53 @@ class SettingState extends State<Setting> {
         } else {
           _saveSharedprefs('notifs', _notificationEnabled);
           firebaseMessaging.unsubscribeFromTopic('notifs');
+        }
+      },
+    );
+  }
+
+  Widget _switchForCancelAllNotification() {
+    return Switch(
+      activeColor: Colors.green[400],
+      value: allNotificationEnabled,
+      onChanged: (value) {
+        allNotificationEnabled = value;
+        if (allNotificationEnabled) {
+          _saveSharedprefs('LocalNotifs', _notificationEnabled);
+          _saveSharedprefs('notifs', _notificationEnabled);
+          _saveSharedprefs('AzanNotifs', _notificationEnabled);
+          firebaseMessaging.subscribeToTopic('notifs');
+          _showDailyAtTime();
+          _showWeeklyAtDayAndTime();
+          azanNotificationEnabled = true;
+          _notificationEnabled = true;
+          setState(() {});
+        } else {
+          _saveSharedprefs('LocalNotifs', _notificationEnabled);
+          _saveSharedprefs('notifs', _notificationEnabled);
+          _saveSharedprefs('AzanNotifs', _notificationEnabled);
+          firebaseMessaging.unsubscribeFromTopic('notifs');
+          _cancelAllNotifications();
+          azanNotificationEnabled = false;
+          _notificationEnabled = false;
+          setState(() {});
+        }
+      },
+    );
+  }
+
+  Widget _switchForCancelAzanNotification() {
+    return Switch(
+      activeColor: Colors.green[400],
+      value: azanNotificationEnabled,
+      onChanged: (value) {
+        azanNotificationEnabled = value;
+        if (azanNotificationEnabled) {
+          _saveSharedprefs('AzanNotifs', _notificationEnabled);
+          _showDailyAtTime();
+        } else {
+          _saveSharedprefs('AzanNotifs', _notificationEnabled);
+          _cancelAzanNotification();
         }
       },
     );
@@ -145,6 +229,121 @@ class SettingState extends State<Setting> {
                           'mailto:jrm78692@gmail.com?subject=Feedback&body=Feedback for App'),
                 ])))
       ],
+    );
+  }
+
+  Future<void> _cancelAllNotifications() async {
+    await flutterLocalNotificationsPlugin.cancelAll();
+  }
+
+  Future<void> _cancelAzanNotification() async {
+    await flutterLocalNotificationsPlugin.cancel(0);
+  }
+
+  Future<void> onSelectNotification(String payload) async {
+    if (payload != null) {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) => CupertinoAlertDialog(
+          title: Text('Notification'),
+          content: Text(payload),
+          actions: [
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        ),
+      );
+    }
+  }
+
+  Future<void> _showDailyAtTime() async {
+    var time = Time(12, 10, 0);
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'repeatDailyAtTime channel id',
+        'repeatDailyAtTime channel name',
+        'repeatDailyAtTime description');
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.showDailyAtTime(0, 'Go for namaz',
+        'It\'s time for namaz', time, platformChannelSpecifics);
+  }
+
+  Future<void> _showWeeklyAtDayAndTime() async {
+    var time = Time(12, 15, 0);
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'show weekly channel id',
+        'show weekly channel name',
+        'show weekly description');
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
+        1,
+        'Jumma Mubarak',
+        'Do not forget for namaz',
+        Day.Friday,
+        time,
+        platformChannelSpecifics);
+  }
+
+  Future<String> _downloadAndSaveImage(String url, String fileName) async {
+    var directory = await getApplicationDocumentsDirectory();
+    var filePath = '${directory.path}/$fileName';
+    var response = await http.get(url);
+    var file = File(filePath);
+    await file.writeAsBytes(response.bodyBytes);
+    return filePath;
+  }
+
+  Future<void> _showBigPictureNotificationHideExpandedLargeIcon() async {
+    var largeIconPath = await _downloadAndSaveImage(
+        'http://via.placeholder.com/48x48', 'largeIcon');
+    var bigPicturePath = await _downloadAndSaveImage(
+        'http://via.placeholder.com/400x800', 'bigPicture');
+    var bigPictureStyleInformation = BigPictureStyleInformation(
+        bigPicturePath, BitmapSource.FilePath,
+        hideExpandedLargeIcon: true,
+        contentTitle: 'overridden <b>big</b> content title',
+        htmlFormatContentTitle: true,
+        summaryText: 'summary <i>text</i>',
+        htmlFormatSummaryText: true);
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'big text channel id',
+        'big text channel name',
+        'big text channel description',
+        largeIcon: largeIconPath,
+        largeIconBitmapSource: BitmapSource.FilePath,
+        style: AndroidNotificationStyle.BigPicture,
+        styleInformation: bigPictureStyleInformation);
+    var platformChannelSpecifics =
+        NotificationDetails(androidPlatformChannelSpecifics, null);
+    await flutterLocalNotificationsPlugin.show(
+        0, 'big text title', 'silent body', platformChannelSpecifics);
+  }
+
+  Future<void> onDidReceiveLocalNotification(
+      int id, String title, String body, String payload) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: Text(title),
+        content: Text(body),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text('Ok'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
     );
   }
 }
