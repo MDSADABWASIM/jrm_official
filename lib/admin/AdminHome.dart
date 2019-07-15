@@ -2,13 +2,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jrm/admin/AdminAddArticle.dart';
 import 'package:jrm/admin/AdminArticles.dart';
+import 'package:jrm/admin/AdminTimings.dart';
 
+class AdminHomepage extends StatefulWidget {
+  @override
+  _AdminHomepageState createState() => _AdminHomepageState();
+}
 
-class AdminHomepage extends StatelessWidget {
+class _AdminHomepageState extends State<AdminHomepage> {
   final _divider = const Divider(color: Colors.grey, height: 10.0);
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
@@ -18,15 +27,14 @@ class AdminHomepage extends StatelessWidget {
     );
   }
 
-  _adminHome(BuildContext context) {  
-    return ListView(
-      padding: EdgeInsets.all(8),
-       children: [
-         _listTile(Icons.chat, 'Articles', AdminArticlesPage(), context),
-    _divider,
-    _listTile(Icons.people, 'Write Article', PostArticle(), context),
-    _divider,
-     
+  _adminHome(BuildContext context) {
+    return ListView(padding: EdgeInsets.all(8), children: [
+      _listTile(Icons.chat, 'Articles', AdminArticlesPage(), context),
+      _divider,
+      _listTile(Icons.people, 'Write Article', PostArticle(), context),
+      _divider,
+      _listTile(Icons.people, 'Post Azan Timings', PostTimings(), context),
+      _divider,
       SizedBox(height: 20),
     ]);
   }
@@ -43,8 +51,29 @@ class AdminHomepage extends StatelessWidget {
     );
   }
 
-  void _navigateTo(BuildContext context, Widget name) {
-    Navigator.push(
+  void _navigateTo(BuildContext context, Widget name) async {
+    var result = await Navigator.push(
         context, CupertinoPageRoute(builder: (BuildContext context) => name));
+    if (result == 'success') {
+      showInSnackBar('Successfully Added', Colors.green[400]);
+    }
+  }
+
+  void showInSnackBar(String value,  Color color) {
+    FocusScope.of(context).requestFocus(new FocusNode());
+    _scaffoldKey.currentState?.removeCurrentSnackBar();
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      content: new Text(
+        value,
+        softWrap: true,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            color: Colors.white,
+            fontSize: 18.0,
+            fontFamily: "Calibre-Semibold"),
+      ),
+      backgroundColor: color == null ? Colors.red[300] : color,
+      duration: Duration(seconds: 2),
+    ));
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,16 @@ class SettingState extends State<Setting> {
   bool _notificationEnabled = false,
       azanNotificationEnabled = false,
       allNotificationEnabled = false;
+  int fazarHour,
+      fazarMinute,
+      zoharHour,
+      zoharMinute,
+      asarHour,
+      asarMinute,
+      maghribHour,
+      maghribMinute,
+      isaHour,
+      isaMinute;
   FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   String version;
@@ -31,9 +42,11 @@ class SettingState extends State<Setting> {
 
   @override
   void initState() {
+   flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
     _getSharedprefs();
     _getVersion();
-    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    _getTimings();
+   
     var initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOS = IOSInitializationSettings(
@@ -93,6 +106,40 @@ class SettingState extends State<Setting> {
         ),
       )
     ]);
+  }
+
+  _getTimings() async {
+    QuerySnapshot snapshot =
+        await Firestore.instance.collection('Timings').getDocuments();
+     if(snapshot.documents.length!=null && snapshot.documents.length!=0)
+      _getExactTimings(snapshot);
+  }
+
+  _getExactTimings(QuerySnapshot snapshot) {
+    fazarHour =
+        int.parse(snapshot.documents[0].data['fazar'].toString().split(",")[0]);
+    fazarMinute =
+        int.parse(snapshot.documents[0].data['fazar'].toString().split(",")[1]);
+
+    zoharHour =
+        int.parse(snapshot.documents[0].data['zohar'].toString().split(",")[0]);
+    zoharMinute =
+        int.parse(snapshot.documents[0].data['zohar'].toString().split(",")[1]);
+
+    asarHour =
+        int.parse(snapshot.documents[0].data['asar'].toString().split(",")[0]);
+    asarMinute =
+        int.parse(snapshot.documents[0].data['asar'].toString().split(",")[1]);
+
+    maghribHour = int.parse(
+        snapshot.documents[0].data['maghrib'].toString().split(",")[0]);
+    maghribMinute = int.parse(
+        snapshot.documents[0].data['maghrib'].toString().split(",")[1]);
+
+    isaHour =
+        int.parse(snapshot.documents[0].data['isa'].toString().split(",")[0]);
+    isaMinute =
+        int.parse(snapshot.documents[0].data['isa'].toString().split(",")[1]);
   }
 
   _listItem(String text, Widget page, BuildContext context) {
@@ -157,7 +204,11 @@ class SettingState extends State<Setting> {
           _saveSharedprefs('notifs', _notificationEnabled);
           _saveSharedprefs('AzanNotifs', _notificationEnabled);
           firebaseMessaging.subscribeToTopic('notifs');
-          _showDailyAtTime();
+          _showDailyAtFazarTime();
+          _showDailyAtZoharTime();
+          _showDailyAtAsarTime();
+          _showDailyAtMaghribTime();
+          _showDailyAtIsaTime();
           _showWeeklyAtDayAndTime();
           azanNotificationEnabled = true;
           _notificationEnabled = true;
@@ -184,7 +235,11 @@ class SettingState extends State<Setting> {
         azanNotificationEnabled = value;
         if (azanNotificationEnabled) {
           _saveSharedprefs('AzanNotifs', _notificationEnabled);
-          _showDailyAtTime();
+          _showDailyAtFazarTime();
+           _showDailyAtZoharTime();
+          _showDailyAtAsarTime();
+          _showDailyAtMaghribTime();
+          _showDailyAtIsaTime();
         } else {
           _saveSharedprefs('AzanNotifs', _notificationEnabled);
           _cancelAzanNotification();
@@ -261,8 +316,8 @@ class SettingState extends State<Setting> {
     }
   }
 
-  Future<void> _showDailyAtTime() async {
-    var time = Time(12, 10, 0);
+  Future<void> _showDailyAtFazarTime() async {
+    var time = Time(fazarHour,fazarMinute, 0);
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'repeatDailyAtTime channel id',
         'repeatDailyAtTime channel name',
@@ -270,8 +325,60 @@ class SettingState extends State<Setting> {
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.showDailyAtTime(0, 'Go for namaz',
-        'It\'s time for namaz', time, platformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.showDailyAtTime(0, 'Fazar namaz is here',
+        'It\'s time to wake up for fazar namaz', time, platformChannelSpecifics);
+  }
+
+    Future<void> _showDailyAtZoharTime() async {
+    var time = Time(zoharHour,zoharMinute, 0);
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'repeatDailyAtTime channel id',
+        'repeatDailyAtTime channel name',
+        'repeatDailyAtTime description');
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.showDailyAtTime(0, 'Zohar namaz is here',
+        'It\'s time for zohar namaz', time, platformChannelSpecifics);
+  }
+
+    Future<void> _showDailyAtAsarTime() async {
+    var time = Time(asarHour,asarMinute, 0);
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'repeatDailyAtTime channel id',
+        'repeatDailyAtTime channel name',
+        'repeatDailyAtTime description');
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.showDailyAtTime(0, 'Asar namaz is here',
+        'Don\'t forget to pray on asar', time, platformChannelSpecifics);
+  }
+
+    Future<void> _showDailyAtMaghribTime() async {
+    var time = Time(maghribHour,maghribMinute, 0);
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'repeatDailyAtTime channel id',
+        'repeatDailyAtTime channel name',
+        'repeatDailyAtTime description');
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.showDailyAtTime(0, 'Maghrib time is here',
+        'Hurry up for maghrib namaz', time, platformChannelSpecifics);
+  }
+
+    Future<void> _showDailyAtIsaTime() async {
+    var time = Time(isaHour,isaMinute, 0);
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'repeatDailyAtTime channel id',
+        'repeatDailyAtTime channel name',
+        'repeatDailyAtTime description');
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.showDailyAtTime(0, 'It\'s Isa time',
+        'It\'s time  for isa namaz', time, platformChannelSpecifics);
   }
 
   Future<void> _showWeeklyAtDayAndTime() async {

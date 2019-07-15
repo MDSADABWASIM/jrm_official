@@ -74,7 +74,6 @@ class _LoginUIState extends State<LoginUI> {
               ));
             } else {
               firebaseMessaging.subscribeToTopic('notifs');
-              _showDailyAtTime();
               _showWeeklyAtDayAndTime();
               _saveSharedprefs('notifs', true);
               _saveSharedprefs('AzanNotifs', true);
@@ -132,19 +131,6 @@ class _LoginUIState extends State<LoginUI> {
         ),
       );
     }
-  }
-
-  Future<void> _showDailyAtTime() async {
-    var time = Time(12, 10, 0);
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'repeatDailyAtTime channel id',
-        'repeatDailyAtTime channel name',
-        'repeatDailyAtTime description');
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.showDailyAtTime(0, 'Go for namaz',
-        'It\'s time for namaz', time, platformChannelSpecifics);
   }
 
   Future<void> _showWeeklyAtDayAndTime() async {
