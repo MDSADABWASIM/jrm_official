@@ -23,12 +23,10 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(builder: (context) => Home()));
       } else {
-      
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(builder: (context) => Login()));
       }
     }else{
-         preference.setBool('seen', true);
          Navigator.of(context).pushReplacement(
             new MaterialPageRoute(builder: (context) => OnBoardingCircle()));
     }

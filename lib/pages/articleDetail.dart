@@ -68,8 +68,8 @@ class _ArticleDetailState extends State<ArticleDetail> {
         child: Row(
         children: <Widget>[
          Icon(EvaIcons.shareOutline,),
-          SizedBox(width: 5),
-           Text('share', textAlign: TextAlign.center, style: TextStyle(fontSize: 15)),
+          // SizedBox(width: 5),
+          //  Text('share', textAlign: TextAlign.center, style: TextStyle(fontSize: 15)),
         ],
       ),
    );
