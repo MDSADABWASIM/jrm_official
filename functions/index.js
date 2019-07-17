@@ -28,3 +28,28 @@ exports.newArticles = functions.firestore.document("Articles/{any}")
         return null;
    });
 });
+
+//new live notification.
+exports.newLive = functions.firestore.document("Lives/{any}")
+.onCreate((change, context) => 
+{   
+    const title = change.data().title;
+    const notificationContent = {
+        notification: {
+            title: "JRM is Live  🔴",
+            body: title,
+            icon: "default",
+            sound: "default"
+        }
+    };
+
+     return admin.messaging().sendToTopic("LiveNotifs", notificationContent)
+    .then(function(result){
+        console.log("Notification on live sent!");
+        return null;
+    })
+    .catch(function(error){
+        console.log('Notification on live failed:', error);
+        return null;
+   });
+});

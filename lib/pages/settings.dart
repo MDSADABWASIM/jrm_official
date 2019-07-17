@@ -70,7 +70,7 @@ class SettingState extends State<Setting> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text('Notify me on new articles', style: TextStyle(fontSize: 18.0)),
+          Text('Notify on new articles', style: TextStyle(fontSize: 18.0)),
           _switchForNotification()
         ],
       ),
@@ -79,7 +79,7 @@ class SettingState extends State<Setting> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text('Notify me on Namaz ', style: TextStyle(fontSize: 18.0)),
+          Text('Notify on Namaz time ', style: TextStyle(fontSize: 18.0)),
           _switchForCancelAzanNotification(),
         ],
       ),
@@ -185,9 +185,11 @@ class SettingState extends State<Setting> {
         if (_notificationEnabled) {
           _saveSharedprefs('notifs', _notificationEnabled);
           firebaseMessaging.subscribeToTopic('notifs');
+          firebaseMessaging.subscribeToTopic('LiveNotifs');
         } else {
           _saveSharedprefs('notifs', _notificationEnabled);
           firebaseMessaging.unsubscribeFromTopic('notifs');
+          firebaseMessaging.unsubscribeFromTopic('LiveNotifs');
         }
       },
     );
@@ -204,6 +206,7 @@ class SettingState extends State<Setting> {
           _saveSharedprefs('notifs', _notificationEnabled);
           _saveSharedprefs('AzanNotifs', _notificationEnabled);
           firebaseMessaging.subscribeToTopic('notifs');
+          firebaseMessaging.subscribeToTopic('LiveNotifs');
           _showDailyAtFazarTime();
           _showDailyAtZoharTime();
           _showDailyAtAsarTime();
@@ -218,6 +221,7 @@ class SettingState extends State<Setting> {
           _saveSharedprefs('notifs', _notificationEnabled);
           _saveSharedprefs('AzanNotifs', _notificationEnabled);
           firebaseMessaging.unsubscribeFromTopic('notifs');
+          firebaseMessaging.unsubscribeFromTopic('LiveNotifs');
           _cancelAllNotifications();
           azanNotificationEnabled = false;
           _notificationEnabled = false;

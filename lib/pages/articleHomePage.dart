@@ -4,11 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:jrm/pages/allArticlesPage.dart';
+import 'package:jrm/pages/allLivePage.dart';
 import 'package:jrm/pages/articleDetail.dart';
 import 'package:jrm/pages/settings.dart';
 import 'package:jrm/widgets/aboutDev.dart';
 import 'package:residemenu/residemenu.dart';
 import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 var cardAspectRatio = 12.0 / 16.0;
 var widgetAspectRatio = cardAspectRatio * 1.2;
@@ -21,7 +23,7 @@ class ArticleHomePage extends StatefulWidget {
 class _ArticleHomePageState extends State<ArticleHomePage>
     with TickerProviderStateMixin {
   MenuController _menuController;
-  Query query;
+  Query query, liveQuery;
   List<DocumentSnapshot> documents = [];
   PageController controller;
   double currentPage = 0;
@@ -39,6 +41,10 @@ class _ArticleHomePageState extends State<ArticleHomePage>
     query = Firestore.instance
         .collection('Articles')
         .limit(10)
+        .orderBy('createdAt', descending: true);
+    liveQuery = Firestore.instance
+        .collection('Lives')
+        .limit(1)
         .orderBy('createdAt', descending: true);
     _menuController = new MenuController(vsync: this);
     controller = PageController(initialPage: documents.length - 1);
@@ -69,7 +75,6 @@ class _ArticleHomePageState extends State<ArticleHomePage>
           ),
         ),
         children: <Widget>[
-          ///I have to make these drawer list widgets manually cause it is containing different methods.
           new Material(
             color: Colors.transparent,
             child: new InkWell(
@@ -236,9 +241,9 @@ class _ArticleHomePageState extends State<ArticleHomePage>
                               onPressed: () {
                                 Navigator.of(context).push(CupertinoPageRoute(
                                   builder: (context) => ArticleDetail(
-                                        document: documents[
-                                            currentPage.round().toInt()],
-                                      ),
+                                    document:
+                                        documents[currentPage.round().toInt()],
+                                  ),
                                 ));
                               },
                               child: Text("Read this article",
@@ -251,7 +256,151 @@ class _ArticleHomePageState extends State<ArticleHomePage>
                             ),
                           ),
                         ),
-                        SizedBox(height: 20)
+                        SizedBox(height: 30),
+                        StreamBuilder(
+                          stream: liveQuery.snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData &&
+                                snapshot.data.documents.length != null) {
+                              DocumentSnapshot snap =
+                                  snapshot.data.documents[0];
+                              return Column(
+                                children: <Widget>[
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Text(' Live ',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 40.0,
+                                              fontFamily: "Calibre-Semibold",
+                                              letterSpacing: 1.0,
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFFff6e6e),
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                          child: Center(
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 22.0,
+                                                  vertical: 6.0),
+                                              child: Text("Latest",
+                                                  style: TextStyle(
+                                                      color: Colors.white)),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 15.0,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.of(context)
+                                                .push(CupertinoPageRoute(
+                                              builder: (context) =>
+                                                  AllLivePage(),
+                                            ));
+                                          },
+                                          child: Text("see more",
+                                              style: TextStyle(
+                                                  color: Colors.blueAccent,
+                                                  fontSize: 16)),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      if (await canLaunch(snap['url']))
+                                        launch(snap['url'], forceWebView: true);
+                                    },
+                                    child: Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 20.0),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(16.0),
+                                          child: Container(
+                                            height: 300,
+                                            width: 250,
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Colors.black12,
+                                                      offset: Offset(3.0, 6.0),
+                                                      blurRadius: 10.0)
+                                                ]),
+                                            child: AspectRatio(
+                                              aspectRatio: cardAspectRatio,
+                                              child: Stack(
+                                                fit: StackFit.expand,
+                                                children: <Widget>[
+                                                  Image.asset(snap['image'],
+                                                      fit: BoxFit.none),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.bottomLeft,
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: <Widget>[
+                                                        Padding(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      16.0,
+                                                                  vertical:
+                                                                      8.0),
+                                                          child: Text(
+                                                              snap['title'],
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 25.0,
+                                                              )),
+                                                        ),
+                                                        SizedBox(height: 20.0),
+                                                      ],
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            } else
+                              return Center(child: CircularProgressIndicator());
+                          },
+                        ),
+                        SizedBox(height: 20),
                       ],
                     ),
                   );

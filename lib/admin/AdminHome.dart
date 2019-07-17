@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jrm/admin/AdminAddArticle.dart';
+import 'package:jrm/admin/AdminAddLive.dart';
 import 'package:jrm/admin/AdminArticles.dart';
+import 'package:jrm/admin/AdminLives.dart';
 import 'package:jrm/admin/AdminTimings.dart';
 
 class AdminHomepage extends StatefulWidget {
@@ -31,7 +33,11 @@ class _AdminHomepageState extends State<AdminHomepage> {
     return ListView(padding: EdgeInsets.all(8), children: [
       _listTile(Icons.chat, 'Articles', AdminArticlesPage(), context),
       _divider,
+        _listTile(Icons.chat, 'Lives', AdminLivePage(), context),
+      _divider,
       _listTile(Icons.people, 'Write Article', PostArticle(), context),
+      _divider,
+        _listTile(Icons.chat, 'Post Live', PostLive(), context),
       _divider,
       _listTile(Icons.people, 'Post Azan Timings', PostTimings(), context),
       _divider,

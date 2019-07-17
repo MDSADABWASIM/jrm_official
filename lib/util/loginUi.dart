@@ -74,6 +74,7 @@ class _LoginUIState extends State<LoginUI> {
               ));
             } else {
               firebaseMessaging.subscribeToTopic('notifs');
+              firebaseMessaging.subscribeToTopic('LiveNotifs');
               _showWeeklyAtDayAndTime();
               _saveSharedprefs('notifs', true);
               _saveSharedprefs('AzanNotifs', true);
