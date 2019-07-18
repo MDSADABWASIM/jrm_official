@@ -34,9 +34,9 @@ class _AdminHomepageState extends State<AdminHomepage> {
 
   _adminHome(BuildContext context) {
     return ListView(padding: EdgeInsets.all(8), children: [
-      _listTile(EvaIcons.edit2, 'Articles', AdminArticlesPage(), context),
+      _listTile(EvaIcons.bookOutline, 'Articles', AdminArticlesPage(), context),
       _divider,
-        _listTile(EvaIcons.calendar, 'Lives', AdminLivePage(), context),
+        _listTile(EvaIcons.calendarOutline, 'Lives', AdminLivePage(), context),
       _divider,
       _listTile(EvaIcons.edit2Outline, 'Write Article', PostArticle(), context),
       _divider,
