@@ -1,3 +1,4 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jrm/admin/AdminAddArticle.dart';
@@ -5,6 +6,8 @@ import 'package:jrm/admin/AdminAddLive.dart';
 import 'package:jrm/admin/AdminArticles.dart';
 import 'package:jrm/admin/AdminLives.dart';
 import 'package:jrm/admin/AdminTimings.dart';
+import 'package:jrm/admin/BranchRequest.dart';
+import 'package:jrm/admin/MemberRequest.dart';
 
 class AdminHomepage extends StatefulWidget {
   @override
@@ -31,15 +34,19 @@ class _AdminHomepageState extends State<AdminHomepage> {
 
   _adminHome(BuildContext context) {
     return ListView(padding: EdgeInsets.all(8), children: [
-      _listTile(Icons.chat, 'Articles', AdminArticlesPage(), context),
+      _listTile(EvaIcons.edit2, 'Articles', AdminArticlesPage(), context),
       _divider,
-        _listTile(Icons.chat, 'Lives', AdminLivePage(), context),
+        _listTile(EvaIcons.calendar, 'Lives', AdminLivePage(), context),
       _divider,
-      _listTile(Icons.people, 'Write Article', PostArticle(), context),
+      _listTile(EvaIcons.edit2Outline, 'Write Article', PostArticle(), context),
       _divider,
-        _listTile(Icons.chat, 'Post Live', PostLive(), context),
+        _listTile(EvaIcons.calendarOutline, 'Post Live', PostLive(), context),
       _divider,
-      _listTile(Icons.people, 'Post Azan Timings', PostTimings(), context),
+        _listTile(EvaIcons.peopleOutline, 'Branch Request', BranchRequests(), context),
+      _divider,
+        _listTile(EvaIcons.personAddOutline, 'Member Request', MemberRequests(), context),
+      _divider,
+      _listTile(EvaIcons.clockOutline, 'Post Azan Timings', PostTimings(), context),
       _divider,
       SizedBox(height: 20),
     ]);

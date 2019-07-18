@@ -146,7 +146,7 @@ class _CompassState extends State<Compass> {
       Row( mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 
-                Text(_today.toFormat("MMMM dd yyyy"),
+                Text(_today.toFormat("MMMM dd "),
             style: TextStyle(
                 fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white)),
                 SizedBox(width: 10),

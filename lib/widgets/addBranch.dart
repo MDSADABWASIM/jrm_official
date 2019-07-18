@@ -3,17 +3,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:jrm/util/dropDown.dart';
 
-class PostLive extends StatefulWidget {
+class AddBranch extends StatefulWidget {
   @override
-  PostLiveState createState() {
-    return new PostLiveState();
+  AddBranchState createState() {
+    return new AddBranchState();
   }
 }
 
-class PostLiveState extends State<PostLive> {
+class AddBranchState extends State<AddBranch> {
   String name,
       titleHint = 'Enter Article title',
-      urlHint = 'Enter fb live url here',
+      nameHint = 'Enter Author name',
+      descHint = 'Write the article here',
       _selectedImage = 'Select an image';
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<String> _imageDropDownItems = [
@@ -26,12 +27,14 @@ class PostLiveState extends State<PostLive> {
   ];
 
   TextEditingController _postTitleController = TextEditingController();
-  TextEditingController _postUrlController = TextEditingController();
+  TextEditingController _postDescController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
 
   @override
   void dispose() {
     _postTitleController?.dispose();
-    _postUrlController?.dispose();
+    _postDescController?.dispose();
+    _nameController?.dispose();
     super.dispose();
   }
 
@@ -47,14 +50,14 @@ class PostLiveState extends State<PostLive> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         elevation: 5.0,
-        title: Text(' Post Live',
+        title: Text('Open Branch',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
       ),
-      body: _postArticlePageBody(),
+      body: _addBranchPageBody(),
     );
   }
 
-  Widget _postArticlePageBody() {
+  Widget _addBranchPageBody() {
     return Container(
       margin: EdgeInsets.all(10.0),
       child: ListView(
@@ -63,12 +66,29 @@ class PostLiveState extends State<PostLive> {
           _titleForItems('Select an image'),
           SizedBox(height: 15),
           _dropDownForImage(),
-          SizedBox(height: 30.0),
-          _titleForItems('Live Title'),
+          SizedBox(height: 25.0),
+          _titleForItems('Author Name'),
           SizedBox(height: 10.0),
           Container(
             color: Colors.white,
-            height: 100.0,
+            height: 60.0,
+            child: TextField(
+                textInputAction: TextInputAction.newline,
+                maxLines: null,
+                decoration: InputDecoration(
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    prefix: Text(' '),
+                    hintText: '$nameHint'),
+                controller: _nameController,
+                maxLength: 20),
+          ),
+          SizedBox(height: 30.0),
+          _titleForItems('Article Title'),
+          SizedBox(height: 10.0),
+          Container(
+            color: Colors.white,
+            height: 130.0,
             child: TextField(
                 textInputAction: TextInputAction.newline,
                 maxLines: null,
@@ -81,11 +101,11 @@ class PostLiveState extends State<PostLive> {
                 maxLength: 50),
           ),
           SizedBox(height: 30.0),
-          _titleForItems('Live Url'),
+          _titleForItems('Article Description'),
           SizedBox(height: 10.0),
           Container(
             color: Colors.white,
-            height: 100.0,
+            height: 250.0,
             child: TextField(
               textInputAction: TextInputAction.newline,
               maxLines: null,
@@ -93,15 +113,15 @@ class PostLiveState extends State<PostLive> {
                   focusedBorder: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   prefix: Text(' '),
-                  hintText: '$urlHint'),
-              controller: _postUrlController,
+                  hintText: '$descHint'),
+              controller: _postDescController,
             ),
           ),
           SizedBox(height: 50.0),
           RaisedButton(
               color: Colors.green[400],
               shape: OutlineInputBorder(borderSide: BorderSide.none),
-              child: Text('Publish  Live',
+              child: Text('Send Request',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 17,
@@ -154,15 +174,16 @@ class PostLiveState extends State<PostLive> {
     Firestore.instance.runTransaction((transaction) async {
       int time = DateTime.now().millisecondsSinceEpoch;
       String postId =
-          Firestore.instance.collection('Lives').document().documentID;
+          Firestore.instance.collection('Branch').document().documentID;
 
       await transaction
-          .set(Firestore.instance.collection('Lives').document('$postId'), {
+          .set(Firestore.instance.collection('Branch').document('$postId'), {
         'id': postId.toString(),
         'image': image,
         'createdAt': time,
         'title': _postTitleController.text.toString(),
-        'url': _postUrlController.text.toString(),
+        'desc': _postDescController.text.toString(),
+        'author': _nameController.text.toString(),
         'tag':''
       });
     }).whenComplete(() {
@@ -190,12 +211,16 @@ class PostLiveState extends State<PostLive> {
       showInSnackBar(value: 'Select an image');
       return;
     }
-    if (_postTitleController.text == '') {
-      showInSnackBar(value: 'Enter the title for the live');
+    if (_nameController.text == '') {
+      showInSnackBar(value: 'Enter the name of author');
       return;
     }
-    if (_postUrlController.text == '') {
-      showInSnackBar(value: 'Enter the URL of fb live');
+    if (_postTitleController.text == '') {
+      showInSnackBar(value: 'Enter the title for the article');
+      return;
+    }
+    if (_postDescController.text == '') {
+      showInSnackBar(value: 'Enter the description for article');
       return;
     }
     await _uploadToFirestore();

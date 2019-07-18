@@ -329,7 +329,7 @@ class _ArticleHomePageState extends State<ArticleHomePage>
                                   GestureDetector(
                                     onTap: () async {
                                       if (await canLaunch(snap['url']))
-                                        launch(snap['url'], forceWebView: true);
+                                        launch(snap['url']);
                                     },
                                     child: Align(
                                       alignment: Alignment.bottomLeft,

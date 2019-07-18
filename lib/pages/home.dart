@@ -15,6 +15,7 @@ import 'package:jrm/widgets/alert.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:unicorndial/unicorndial.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 var cardAspectRatio = 12.0 / 16.0;
@@ -123,11 +124,41 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     var provider = Provider.of<BottomNavigationBarProvider>(context);
     var connectionStatus = Provider.of<ConnectivityStatus>(context);
+     var childButtons = List<UnicornButton>();
+
+    childButtons.add(UnicornButton(
+        hasLabel: true,
+        labelText: "become a Jrm member",
+        currentButton: FloatingActionButton(
+          heroTag: "addPerson",
+          backgroundColor: Colors.purple,
+          mini: true,
+          child: Icon(EvaIcons.personAddOutline),
+          onPressed: () {},
+        )));
+
+    childButtons.add(UnicornButton(
+        hasLabel: true,
+        labelText: "open a Jrm branch",
+        currentButton: FloatingActionButton(
+            heroTag: "people",
+            backgroundColor: Colors.green,
+            mini: true,
+            onPressed: (){},
+            child: Icon(EvaIcons.peopleOutline),
+            )));
+   
     return Scaffold(
       key: _scaffoldKey,
       body: connectionStatus == ConnectivityStatus.Cellular
           ? _children[provider.currentIndex]
           : _noInternetImage(context),
+      floatingActionButton: UnicornDialer(
+            backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
+            parentButtonBackground: Colors.redAccent,
+            orientation: UnicornOrientation.VERTICAL,
+            parentButton: Icon(EvaIcons.plusCircleOutline),
+            childButtons: childButtons),
       bottomNavigationBar: BubbleBottomBar(
         opacity: .2,
         currentIndex: provider.currentIndex,
@@ -136,8 +167,8 @@ class _HomeState extends State<Home> {
         },
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
         elevation: 8,
-        // fabLocation: BubbleBottomBarFabLocation.end, //new
-        // hasNotch: true, //new
+        //  fabLocation: BubbleBottomBarFabLocation.end, //new
+        //  hasNotch: true, //new
         hasInk: true, //new, gives a cute ink effect
         inkColor: Colors.black12, //optional, uses theme color if not specified
         items: <BubbleBottomBarItem>[

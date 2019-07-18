@@ -1,9 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:jrm/pages/articleDetail.dart';
 import 'package:jrm/util/textStyle.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+  String _date(int date){
+DateTime now=DateTime.fromMillisecondsSinceEpoch(date);
+String newDate= ('${now.day}/${now.month}/${now.year}');
+return newDate;
+}
+
 
 //builds and return card with title,image
 Widget _buildCircularImage(String image) {
@@ -33,7 +39,7 @@ Widget _buildCircularImage(String image) {
   );
 }
 
-_cardElements(String title) {
+_cardElements(String title,date) {
   return Container(
     margin: EdgeInsets.fromLTRB(100.0, 16.0, 16.0, 16.0),
     constraints: BoxConstraints.expand(),
@@ -45,12 +51,13 @@ _cardElements(String title) {
         Text(
           title,
           style: Style.cardHeaderTextStyle,
-          maxLines: 3,
+          maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
         SizedBox(
           height: 10.0,
         ),
+        Text('Date: $date',overflow: TextOverflow.ellipsis),
       ],
     ),
   );
@@ -82,13 +89,14 @@ class AdminLiveCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final date=_date(document['createdAt']);
     final cardImage = _buildCircularImage(document['image']);
-    final cardElements = _cardElements(document['title']);
+    final cardElements = _cardElements(document['title'],date);
     final url = document['url'];
     return GestureDetector(
       onLongPress: () => _showDeleteDialog(context, document['id']),
       onTap: () async {
-        if (await canLaunch(url)) launch(url, forceWebView: true);
+        if (await canLaunch(url)) launch(url);
       },
       child: Container(
         height: 120.0,
