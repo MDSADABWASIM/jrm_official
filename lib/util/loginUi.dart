@@ -4,7 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:jrm/models/privacyPolicy.dart';
+import 'package:jrm/widgets/privacyPolicy.dart';
 import 'package:jrm/pages/home.dart';
 import 'package:jrm/util/auth.dart';
 import 'package:path_provider/path_provider.dart';
@@ -207,6 +207,7 @@ class _LoginUIState extends State<LoginUI> {
     );
   }
 }
+
 
 const List<Color> signInGradients = [
   Color(0xFF0EDED2),
