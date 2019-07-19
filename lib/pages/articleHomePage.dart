@@ -8,6 +8,7 @@ import 'package:jrm/pages/allLivePage.dart';
 import 'package:jrm/pages/articleDetail.dart';
 import 'package:jrm/pages/settings.dart';
 import 'package:jrm/widgets/aboutDev.dart';
+import 'package:jrm/widgets/aboutJrm.dart';
 import 'package:residemenu/residemenu.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -66,55 +67,7 @@ class _ArticleHomePageState extends State<ArticleHomePage>
           image: new DecorationImage(
               image: new AssetImage("assets/kaaba.png"), fit: BoxFit.cover)),
       controller: _menuController,
-      leftScaffold: new MenuScaffold(
-        header: new ConstrainedBox(
-          constraints: new BoxConstraints(maxHeight: 80.0, maxWidth: 100.0),
-          child: new CircleAvatar(
-            backgroundImage: new AssetImage('assets/other.png'),
-            radius: 30.0,
-          ),
-        ),
-        children: <Widget>[
-          new Material(
-            color: Colors.transparent,
-            child: new InkWell(
-              child: ResideMenuItem(
-                title: 'Settings',
-                icon: const Icon(Icons.settings, color: Colors.white),
-              ),
-              onTap: () {
-                Navigator.of(context).push(CupertinoPageRoute(
-                  builder: (context) => Setting(),
-                ));
-              },
-            ),
-          ),
-          new Material(
-            color: Colors.transparent,
-            child: new InkWell(
-              child: ResideMenuItem(
-                title: 'About App Dev',
-                icon: const Icon(Icons.person_outline, color: Colors.white),
-              ),
-              onTap: () {
-                Navigator.of(context).push(CupertinoPageRoute(
-                  builder: (context) => AboutDev(),
-                ));
-              },
-            ),
-          ),
-          new Material(
-            color: Colors.transparent,
-            child: new InkWell(
-              child: ResideMenuItem(
-                title: 'Share the App',
-                icon: const Icon(Icons.share, color: Colors.white),
-              ),
-              onTap: () => _sharer(),
-            ),
-          ),
-        ],
-      ),
+      leftScaffold: _menuScaffold(),
       child: Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -411,6 +364,71 @@ class _ArticleHomePageState extends State<ArticleHomePage>
       ),
     );
   }
+
+MenuScaffold _menuScaffold(){
+  return new MenuScaffold(
+        header: new ConstrainedBox(
+          constraints: new BoxConstraints(maxHeight: 80.0, maxWidth: 100.0),
+          child: new CircleAvatar(
+            backgroundImage: new AssetImage('assets/other.png'),
+            radius: 30.0,
+          ),
+        ),
+        children: <Widget>[
+          new Material(
+            color: Colors.transparent,
+            child: new InkWell(
+              child: ResideMenuItem(
+                title: 'Settings',
+                icon: const Icon(Icons.settings, color: Colors.white),
+              ),
+              onTap: () {
+                Navigator.of(context).push(CupertinoPageRoute(
+                  builder: (context) => Setting(),
+                ));
+              },
+            ),
+          ),
+          new Material(
+            color: Colors.transparent,
+            child: new InkWell(
+              child: ResideMenuItem(
+                title: 'About App Dev',
+                icon: const Icon(Icons.person_outline, color: Colors.white),
+              ),
+              onTap: () {
+                Navigator.of(context).push(CupertinoPageRoute(
+                  builder: (context) => AboutDev(),
+                ));
+              },
+            ),
+          ),
+         new Material(
+            color: Colors.transparent,
+            child: new InkWell(
+              child: ResideMenuItem(
+                title: 'About JRM',
+                icon: const Icon(Icons.share, color: Colors.white),
+              ),
+              onTap: () {
+                Navigator.of(context).push(CupertinoPageRoute(
+                  builder: (context) => AboutJrm(),
+                ));}
+            ),
+          ),
+         new Material(
+            color: Colors.transparent,
+            child: new InkWell(
+              child: ResideMenuItem(
+                title: 'Share the App',
+                icon: const Icon(Icons.share, color: Colors.white),
+              ),
+              onTap: () => _sharer(),
+            ),
+          ),
+        ],
+      );
+}
 }
 
 class CardScrollWidget extends StatelessWidget {

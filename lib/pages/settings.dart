@@ -5,7 +5,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:jrm/pages/shajraList.dart';
 import 'package:jrm/widgets/privacyPolicy.dart';
+import 'package:jrm/widgets/terms.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -93,7 +95,11 @@ class SettingState extends State<Setting> {
         ],
       ),
       _divider(),
+         _listItem('Shajra List', Shajra(), context),
+      _divider(),
       _listItem('Privacy policy', PrivacyPolicy(), context),
+      _divider(),
+         _listItem('Terms and conditions', Terms(), context),
       _divider(),
       SizedBox(height: 50),
       GestureDetector(

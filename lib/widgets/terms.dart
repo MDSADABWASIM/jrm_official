@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:jrm/util/textStyle.dart';
 
 class Terms extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Terms & Conditions'),centerTitle: true,),
-      body: Text('''  
+      body: ListView(
+              children:[ Text('''  
 
 Terms and Conditions
 
@@ -109,7 +111,8 @@ To the maximum extent permitted by applicable law, we exclude all representation
 
 The limitations and prohibitions of liability set in this Section and elsewhere in this disclaimer: (a) are subject to the preceding paragraph; and (b) govern all liabilities arising under the disclaimer, including liabilities arising in contract, in tort and for breach of statutory duty.
 
-As long as the app and the information and services on the app are provided free of charge, we will not be liable for any loss or damage of any nature.'''),
+As long as the app and the information and services on the app are provided free of charge, we will not be liable for any loss or damage of any nature.''',style: Style.detailBodyTextStyle,),
+               ] ),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jrm/admin/AdmiinLogin.dart';
+import 'package:jrm/util/textStyle.dart';
 
 class PrivacyPolicy extends StatelessWidget {
   @override
@@ -16,8 +17,11 @@ class PrivacyPolicy extends StatelessWidget {
             child: Text('Privacy Policy')),
         centerTitle: true,
       ),
-      body: Text('''
-      
+      body: ListView(
+         padding: EdgeInsets.all(8),
+              children: [
+                Text('''
+        
 
 Privacy Policy
 
@@ -127,7 +131,8 @@ If you have any questions about this Privacy Policy, please contact us:
 
     By email: jrmheadoffice@gmail.com
 
-      '''),
+        ''',style: Style.detailBodyTextStyle,),
+               ] ),
     );
   }
 }
