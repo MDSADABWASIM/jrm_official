@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:jrm/widgets/adminCard.dart';
+import 'package:jrm/widgets/memberCard.dart';
 
 
 class MemberRequests extends StatefulWidget {
@@ -95,7 +96,7 @@ class _MemberRequestsState extends State<MemberRequests> {
     return Flex(
       direction: Axis.vertical,
       children: <Widget>[
-        AdminCards(document: document),
+        MemberCard(document: document),
       ],
     );
   }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:jrm/widgets/adminCard.dart';
+import 'package:jrm/widgets/branchCard.dart';
 
 
 class BranchRequests extends StatefulWidget {
@@ -95,7 +96,7 @@ class _BranchRequestsState extends State<BranchRequests> {
     return Flex(
       direction: Axis.vertical,
       children: <Widget>[
-        AdminCards(document: document),
+        BranchCard(document: document),
       ],
     );
   }
