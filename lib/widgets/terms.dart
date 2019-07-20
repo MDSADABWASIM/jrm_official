@@ -7,6 +7,7 @@ class Terms extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Terms & Conditions'),centerTitle: true,),
       body: ListView(
+                 padding: EdgeInsets.all(3),
               children:[ Text('''  
 
 Terms and Conditions

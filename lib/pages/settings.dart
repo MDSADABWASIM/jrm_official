@@ -95,8 +95,6 @@ class SettingState extends State<Setting> {
         ],
       ),
       _divider(),
-         _listItem('Shajra List', Shajra(), context),
-      _divider(),
       _listItem('Privacy policy', PrivacyPolicy(), context),
       _divider(),
          _listItem('Terms and conditions', Terms(), context),

@@ -18,7 +18,7 @@ class PrivacyPolicy extends StatelessWidget {
         centerTitle: true,
       ),
       body: ListView(
-         padding: EdgeInsets.all(8),
+         padding: EdgeInsets.all(3),
               children: [
                 Text('''
         

@@ -11,6 +11,8 @@ import 'package:jrm/pages/compass.dart';
 import 'package:jrm/pages/profile.dart';
 import 'package:jrm/util/connectivity.dart';
 import 'package:jrm/util/textStyle.dart';
+import 'package:jrm/widgets/addBranch.dart';
+import 'package:jrm/widgets/addMember.dart';
 import 'package:jrm/widgets/alert.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
@@ -134,7 +136,12 @@ class _HomeState extends State<Home> {
           backgroundColor: Colors.purple,
           mini: true,
           child: Icon(EvaIcons.personAddOutline),
-          onPressed: () {},
+          onPressed: () {
+           Navigator.push(
+          context,
+          CupertinoPageRoute(
+              builder: (context) => AddMember()));
+          },
         )));
 
     childButtons.add(UnicornButton(
@@ -144,7 +151,10 @@ class _HomeState extends State<Home> {
             heroTag: "people",
             backgroundColor: Colors.green,
             mini: true,
-            onPressed: (){},
+            onPressed: (){   Navigator.push(
+          context,
+          CupertinoPageRoute(
+              builder: (context) => AddBranch()));},
             child: Icon(EvaIcons.peopleOutline),
             )));
    

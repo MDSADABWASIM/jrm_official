@@ -4,9 +4,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:jrm/widgets/privacyPolicy.dart';
 import 'package:jrm/pages/home.dart';
 import 'package:jrm/util/auth.dart';
+import 'package:jrm/widgets/terms.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -54,7 +54,7 @@ class _LoginUIState extends State<LoginUI> {
             roundedRectButton(
                 "Accept and Continue", signInGradients, false, context),
             roundedRectButton(
-                "Privacy policy", signUpGradients, false, context),
+                "Terms  & conditions", signUpGradients, false, context),
           ],
         )
       ],
@@ -68,9 +68,9 @@ class _LoginUIState extends State<LoginUI> {
         padding: EdgeInsets.only(bottom: 10),
         child: GestureDetector(
           onTap: () async {
-            if (title == 'Privacy policy') {
+            if (title == 'Terms  & conditions') {
               Navigator.of(context).push(CupertinoPageRoute(
-                builder: (context) => PrivacyPolicy(),
+                builder: (context) => Terms(),
               ));
             } else {
               firebaseMessaging.subscribeToTopic('notifs');

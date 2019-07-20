@@ -7,11 +7,14 @@ import 'package:jrm/pages/allArticlesPage.dart';
 import 'package:jrm/pages/allLivePage.dart';
 import 'package:jrm/pages/articleDetail.dart';
 import 'package:jrm/pages/settings.dart';
+import 'package:jrm/pages/shajraList.dart';
 import 'package:jrm/widgets/aboutDev.dart';
 import 'package:jrm/widgets/aboutJrm.dart';
 import 'package:residemenu/residemenu.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:custom_chewie/custom_chewie.dart';
+import 'package:video_player/video_player.dart';
 
 var cardAspectRatio = 12.0 / 16.0;
 var widgetAspectRatio = cardAspectRatio * 1.2;
@@ -281,8 +284,15 @@ class _ArticleHomePageState extends State<ArticleHomePage>
                                   ),
                                   GestureDetector(
                                     onTap: () async {
-                                      if (await canLaunch(snap['url']))
-                                        launch(snap['url']);
+                                      // if (await canLaunch(snap['url']))
+                                      //   launch(snap['url']);
+                                       Chewie(
+                                        VideoPlayerController.network(snap['url']
+                                         ),
+                                         aspectRatio: 3 / 2,
+                                         autoPlay: false,
+                                         looping: true,
+                                      );
                                     },
                                     child: Align(
                                       alignment: Alignment.bottomLeft,
@@ -389,6 +399,20 @@ MenuScaffold _menuScaffold(){
               },
             ),
           ),
+           new Material(
+            color: Colors.transparent,
+            child: new InkWell(
+              child: ResideMenuItem(
+                title: 'Shajra List',
+                icon: const Icon(Icons.library_books, color: Colors.white),
+              ),
+              onTap: () {
+                Navigator.of(context).push(CupertinoPageRoute(
+                  builder: (context) => Shajra(),
+                ));
+              },
+            ),
+          ),
           new Material(
             color: Colors.transparent,
             child: new InkWell(
@@ -408,7 +432,7 @@ MenuScaffold _menuScaffold(){
             child: new InkWell(
               child: ResideMenuItem(
                 title: 'About JRM',
-                icon: const Icon(Icons.share, color: Colors.white),
+                icon: const Icon(Icons.location_city, color: Colors.white),
               ),
               onTap: () {
                 Navigator.of(context).push(CupertinoPageRoute(

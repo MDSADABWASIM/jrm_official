@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:jrm/util/dropDown.dart';
+import 'package:jrm/util/textStyle.dart';
 
 class AddMember extends StatefulWidget {
   @override
@@ -11,29 +12,80 @@ class AddMember extends StatefulWidget {
 }
 
 class AddMemberState extends State<AddMember> {
-  String name,
-      titleHint = 'Enter Article title',
-      nameHint = 'Enter Author name',
-      descHint = 'Write the article here',
-      _selectedImage = 'Select an image';
+  String 
+         _selectedState = 'Select State',
+         _selectedIdType = 'Select Id type',
+      nameHint = 'Enter your full name',
+      districtHint = 'Enter your district name',
+      fatherHint = 'Enter your father full name',
+      tehsilHint = 'Enter your tehsil name',
+      pincodeHint = 'Enter your area pincode',
+      phoneHint = 'Enter your mobile number',
+      idHint = 'Enter your identity number',
+      emailHint = 'Enter your email id',
+      addressHint = 'Enter your full address',
+       prefixText = '+91';
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  List<String> _imageDropDownItems = [
-    'Kaaba',
-    'Quran',
-    'Mosque',
-    'Flag',
-    'Calender',
-    'Other',
-  ];
-
-  TextEditingController _postTitleController = TextEditingController();
-  TextEditingController _postDescController = TextEditingController();
+  TextEditingController _districtController = TextEditingController();
+  TextEditingController _fatherNameController = TextEditingController();
+  TextEditingController _tehsilNameController = TextEditingController();
+  TextEditingController _pincodeController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _idController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
+  List<String> _idTypeList=['Adhar card','Passport','Voter id','Pan card','DL'];
+List<String> _stateList = [
+    'Arunachal Pradesh',
+    'Assam',
+    'Bihar',
+    'Chhattisgarh',
+    'Goa',
+    'Gujarat',
+    'Haryana',
+    'Himachal Pradesh',
+    'Jammu and Kashmir',
+    'Jharkhand',
+    'Karnataka',
+    'Kerala',
+    'Madhya Pradesh',
+    'Maharashtra',
+    'Manipur',
+    'Meghalaya',
+    'Mizoram',
+    'Nagaland',
+    'Odisha',
+    'Punjab',
+    'Rajasthan',
+    'Sikkim',
+    'Tamil Nadu',
+    'Telangana',
+    'Tripura',
+    'Uttar Pradesh',
+    'Uttarakhand',
+    'West Bengal',
+    'Andaman and Nicobar Islands',
+    'Chandigarh',
+    'Dadra and Nagar Haveli',
+    'Daman and Diu',
+    'Lakshadweep',
+    'National Capital Territory of Delhi',
+    'Puducherry'
+  ];
+DateTime selectedDate = DateTime.now();
+bool _agreed=false;
 
   @override
   void dispose() {
-    _postTitleController?.dispose();
-    _postDescController?.dispose();
+    _districtController?.dispose();
+    _fatherNameController?.dispose();
+    _tehsilNameController?.dispose();
+    _pincodeController?.dispose();
+    _phoneController?.dispose();
+    _idController?.dispose();
+    _emailController?.dispose();
+    _addressController?.dispose();
     _nameController?.dispose();
     super.dispose();
   }
@@ -63,11 +115,62 @@ class AddMemberState extends State<AddMember> {
       child: ListView(
         children: <Widget>[
           SizedBox(height: 30.0),
-          _titleForItems('Select an image'),
+          _titleForItems('Select your state'),
           SizedBox(height: 15),
-          _dropDownForImage(),
+          _dropDownForState(),
           SizedBox(height: 25.0),
-          _titleForItems('Author Name'),
+            _titleForItems('District name'),
+          SizedBox(height: 10.0),
+          Container(
+            color: Colors.white,
+            height: 60.0,
+            child: TextField(
+                textInputAction: TextInputAction.newline,
+                maxLines: null,
+                decoration: InputDecoration(
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    prefix: Text(' '),
+                    hintText: '$districtHint'),
+                controller: _districtController,
+                maxLength: 20),
+          ),
+          SizedBox(height: 30.0),
+            _titleForItems('Tehsil name'),
+          SizedBox(height: 10.0),
+          Container(
+            color: Colors.white,
+            height: 60.0,
+            child: TextField(
+                textInputAction: TextInputAction.newline,
+                maxLines: null,
+                decoration: InputDecoration(
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    prefix: Text(' '),
+                    hintText: tehsilHint),
+                controller: _tehsilNameController,
+                maxLength: 20),
+          ),
+          SizedBox(height: 30.0),
+            _titleForItems('Enter full address'),
+          SizedBox(height: 10.0),
+          Container(
+            color: Colors.white,
+            height: 100.0,
+            child: TextField(
+                textInputAction: TextInputAction.newline,
+                maxLines: null,
+                decoration: InputDecoration(
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    prefix: Text(' '),
+                    hintText: addressHint),
+                controller: _addressController,
+                maxLength: 50),
+          ),
+          SizedBox(height: 30.0),
+          _titleForItems('Name'),
           SizedBox(height: 10.0),
           Container(
             color: Colors.white,
@@ -84,28 +187,12 @@ class AddMemberState extends State<AddMember> {
                 maxLength: 20),
           ),
           SizedBox(height: 30.0),
-          _titleForItems('Article Title'),
+
+          _titleForItems('Father\'s name'),
           SizedBox(height: 10.0),
           Container(
             color: Colors.white,
-            height: 130.0,
-            child: TextField(
-                textInputAction: TextInputAction.newline,
-                maxLines: null,
-                decoration: InputDecoration(
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    prefix: Text(' '),
-                    hintText: '$titleHint'),
-                controller: _postTitleController,
-                maxLength: 50),
-          ),
-          SizedBox(height: 30.0),
-          _titleForItems('Article Description'),
-          SizedBox(height: 10.0),
-          Container(
-            color: Colors.white,
-            height: 250.0,
+            height: 60.0,
             child: TextField(
               textInputAction: TextInputAction.newline,
               maxLines: null,
@@ -113,10 +200,94 @@ class AddMemberState extends State<AddMember> {
                   focusedBorder: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   prefix: Text(' '),
-                  hintText: '$descHint'),
-              controller: _postDescController,
+                  hintText: fatherHint),
+              controller: _fatherNameController,
             ),
           ),
+          SizedBox(height: 30.0),
+             _titleForItems('Pin code'),
+          SizedBox(height: 10.0),
+          Container(
+            color: Colors.white,
+            height: 60.0,
+            child: TextField(
+                textInputAction: TextInputAction.done,
+                keyboardType: TextInputType.number,
+                maxLines: null,
+                decoration: InputDecoration(
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    prefix: Text(' '),
+                    hintText: pincodeHint),
+                controller: _pincodeController),
+          ),
+          SizedBox(height: 30.0),
+             _titleForItems('Email id'),
+          SizedBox(height: 10.0),
+          Container(
+            color: Colors.white,
+            height: 60.0,
+            child: TextField(
+                textInputAction: TextInputAction.done,
+                keyboardType: TextInputType.emailAddress,
+                maxLines: null,
+                decoration: InputDecoration(
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    prefix: Text(' '),
+                    hintText: emailHint),
+                controller: _emailController),
+          ),
+          SizedBox(height: 30.0),
+              _titleForItems('Phone number'),
+          SizedBox(height: 10.0),
+          Container(
+            color: Colors.white,
+            height: 60.0,
+            child: TextField(
+                textInputAction: TextInputAction.done,
+                keyboardType: TextInputType.phone,
+                maxLines: null,
+                decoration: InputDecoration(
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    prefix: Text(prefixText),
+                    hintText: phoneHint),
+                controller: _phoneController),
+          ),
+          SizedBox(height: 30.0),
+             _titleForItems('Select Id type'),
+          SizedBox(height: 15),
+          _dropDownForIdType(),
+          SizedBox(height: 25.0),
+            _titleForItems(' Id number'),
+          SizedBox(height: 10.0),
+          Container(
+            color: Colors.white,
+            height: 60.0,
+            child: TextField(
+                textInputAction: TextInputAction.done,
+                maxLines: null,
+                decoration: InputDecoration(
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    prefix: Text(' '),
+                    hintText: idHint),
+                controller: _idController),
+          ),
+          SizedBox(height: 30.0),
+             _titleForItems('Enter your date of birth'),
+          SizedBox(height: 10.0),
+          GestureDetector(
+            onTap: ()=>_selectDate(context),
+            child: Container(
+              color: Colors.white,
+              height: 60.0,
+              child: Text((selectedDate.day.toString()+'/'+selectedDate.month.toString()+'/'+selectedDate.year.toString()))
+            ),
+          ),
+          SizedBox(height: 30.0),
+          _checkBox(),
           SizedBox(height: 50.0),
           RaisedButton(
               color: Colors.green[400],
@@ -135,42 +306,15 @@ class AddMemberState extends State<AddMember> {
     );
   }
 
-  _titleForItems(String title) {
-    return Text(title + ": ");
-  }
+_titleForItems(String title){
+  return Row(
+    children:<Widget>[
+     Text(title+": ",style:Style.detailHeaderTextStyle),
+     Text('*',style:TextStyle(color:Colors.red)),
+  ]);
+}
 
   _uploadToFirestore() async {
-    String image;
-
-    switch (_selectedImage) {
-      case 'Kaaba':
-        image = 'assets/kaaba.png';
-        break;
-
-      case 'Mosque':
-        image = 'assets/mosque.png';
-        break;
-
-      case 'Quran':
-        image = 'assets/quran.png';
-        break;
-
-      case 'Flag':
-        image = 'assets/flag.png';
-        break;
-
-      case 'Calender':
-        image = 'assets/date.png';
-        break;
-
-      case 'Other':
-        image = 'assets/other.png';
-        break;
-
-      default:
-        image = 'assets/other.png';
-    }
-
     Firestore.instance.runTransaction((transaction) async {
       int time = DateTime.now().millisecondsSinceEpoch;
       String postId =
@@ -179,11 +323,19 @@ class AddMemberState extends State<AddMember> {
       await transaction
           .set(Firestore.instance.collection('Member').document('$postId'), {
         'id': postId.toString(),
-        'image': image,
         'createdAt': time,
-        'title': _postTitleController.text.toString(),
-        'desc': _postDescController.text.toString(),
-        'author': _nameController.text.toString(),
+        'district': _districtController.text.toString(),
+        'father': _fatherNameController.text.toString(),
+        'name': _nameController.text.toString(),
+        'tehsil': _tehsilNameController.text.toString(),
+        'address': _addressController.text.toString(),
+        'pincode': _pincodeController.text.toString(),
+        'phone': prefixText+_phoneController.text.toString(),
+        'state': _selectedState,
+        'idType': _selectedIdType,
+        'idNumber': _idController.text.toString(),
+        'email': _emailController.text.toString(),
+        'dob': selectedDate.toString(),
         'tag':''
       });
     }).whenComplete(() {
@@ -207,46 +359,125 @@ class AddMemberState extends State<AddMember> {
   }
 
   _onButtonTapped() async {
-    if (_selectedImage == 'Select an image') {
-      showInSnackBar(value: 'Select an image');
+    if (_selectedState == 'Select State') {
+      showInSnackBar(value:'Select your state');
       return;
     }
-    if (_nameController.text == '') {
-      showInSnackBar(value: 'Enter the name of author');
+  if (_districtController.text == ''||_districtController.text==districtHint) {
+      showInSnackBar(value:districtHint);
       return;
     }
-    if (_postTitleController.text == '') {
-      showInSnackBar(value: 'Enter the title for the article');
+     if (_tehsilNameController.text == ''||_tehsilNameController.text==tehsilHint) {
+      showInSnackBar(value:tehsilHint);
       return;
     }
-    if (_postDescController.text == '') {
-      showInSnackBar(value: 'Enter the description for article');
+      if (_addressController.text == ''||_addressController.text==addressHint) {
+      showInSnackBar(value:addressHint);
+      return;
+    }
+    if (_nameController.text == ''||_nameController.text==nameHint) {
+      showInSnackBar(value:nameHint);
+      return;
+    }
+
+   if (_fatherNameController.text == ''||_fatherNameController.text==fatherHint) {
+      showInSnackBar(value:fatherHint);
+      return;
+    }
+    if (_pincodeController.text == ''||_pincodeController.text==pincodeHint) {
+      showInSnackBar(value: pincodeHint);
+      return;
+    }
+     if (_emailController.text == ''||_emailController.text==emailHint) {
+      showInSnackBar(value: emailHint);
+      return;
+    }
+     if (_phoneController.text == ''||_phoneController.text==phoneHint) {
+      showInSnackBar(value: phoneHint);
+      return;
+    }
+      if (_selectedIdType == 'Select Id type') {
+      showInSnackBar(value:'Select id type');
+      return;
+    }
+     if (_idController.text == ''||_idController.text==idHint) {
+      showInSnackBar(value: idHint);
+      return;
+    } 
+      if (_agreed == false) {
+      showInSnackBar(value: 'Please check agreement box');
       return;
     }
     await _uploadToFirestore();
   }
 
-  _dropDownForImage() {
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(1920),
+        lastDate: DateTime(2120));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
+  }
+ 
+ _checkBox(){
+ CheckboxListTile(
+    title: Text("I agree to abide by all the rules and regulations set by Jamat Raza-E-Mustafa and pledge to remain firm upon the faith and traditions of the Ahle Sunnat (Maslak-E-Alahazrat), as a member of this organization, I shall continually strive to work for the betterment of the islamic nation and community."),
+    value: _agreed,
+    onChanged: (newValue) =>_agreed=newValue,
+    controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
+  );}
+ 
+  _dropDownForState() {
     return Material(
       child: Container(
         child: DropdownMenu<String>(
-          initialValue: _selectedImage,
+          initialValue: _selectedState,
           onSelected: (item) {
-            _selectedImage = item;
+            _selectedState = item;
             setState(() {});
           },
           itemBuilder: (BuildContext context) {
             return List<PopupMenuEntry<String>>.generate(
-                _imageDropDownItems.length * 2 - 1, (int index) {
+                _stateList.length * 2 - 1, (int index) {
               if (index.isEven) {
-                final item = _imageDropDownItems[index ~/ 2];
+                final item = _stateList[index ~/ 2];
                 return DropdownMenuItemCustom<String>(value: item, text: item);
               } else {
                 return DropdownDivider();
               }
             });
           },
-          child: Text(_selectedImage),
+          child: Text(_selectedState),
+        ),
+      ),
+    );
+  }
+
+  _dropDownForIdType() {
+    return Material(
+      child: Container(
+        child: DropdownMenu<String>(
+          initialValue: _selectedIdType,
+          onSelected: (item) {
+            _selectedIdType = item;
+            setState(() {});
+          },
+          itemBuilder: (BuildContext context) {
+            return List<PopupMenuEntry<String>>.generate(
+                _idTypeList.length * 2 - 1, (int index) {
+              if (index.isEven) {
+                final item = _idTypeList[index ~/ 2];
+                return DropdownMenuItemCustom<String>(value: item, text: item);
+              } else {
+                return DropdownDivider();
+              }
+            });
+          },
+          child: Text(_selectedIdType),
         ),
       ),
     );

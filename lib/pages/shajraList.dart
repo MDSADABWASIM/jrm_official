@@ -12,7 +12,8 @@ class Shajra extends StatelessWidget {
 
   _putInBody(){
     return GridView.count(
-      crossAxisCount: 2,
+     padding: EdgeInsets.all(8),
+      crossAxisCount: 1,
       children: <Widget>[
           _tile('https://www.jamatrazaemustafa.org/docs/Shajra-Shareef-Hindi.pdf','Shajra sharif in hindi','https://www.jamatrazaemustafa.org/docs/shijrahindi.jpg'),
           _tile('https://www.jamatrazaemustafa.org/docs/SHIJRA-SHARIF-English.pdf','Shajra sharif in english','https://www.jamatrazaemustafa.org/docs/shijraenglish.jpg'),
@@ -27,7 +28,7 @@ class Shajra extends StatelessWidget {
                                         launch(url);
                                     },
                                     child: Align(
-                                      alignment: Alignment.bottomLeft,
+                                      alignment: Alignment.center,
                                       child: Padding(
                                         padding:
                                             const EdgeInsets.only(left: 20.0),
@@ -38,7 +39,7 @@ class Shajra extends StatelessWidget {
                                             height: 300,
                                             width: 250,
                                             decoration: BoxDecoration(
-                                                color: Colors.white,
+                                                color: Colors.blue[300],
                                                 boxShadow: [
                                                   BoxShadow(
                                                       color: Colors.black12,
@@ -53,35 +54,7 @@ class Shajra extends StatelessWidget {
                                                   FadeInImage.assetNetwork(
                                                     placeholder: 'assets/quran.png',
                                                     image: image,
-                                                      fit: BoxFit.none),
-                                                  Align(
-                                                    alignment:
-                                                        Alignment.bottomLeft,
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: <Widget>[
-                                                        Padding(
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal:
-                                                                      16.0,
-                                                                  vertical:
-                                                                      8.0),
-                                                          child: Text(title,
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 25.0,
-                                                              )),
-                                                        ),
-                                                        SizedBox(height: 20.0),
-                                                      ],
-                                                    ),
-                                                  )
+                                                      fit: BoxFit.contain),
                                                 ],
                                               ),
                                             ),
