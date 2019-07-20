@@ -115,6 +115,8 @@ bool _agreed=false;
       child: ListView(
         children: <Widget>[
           SizedBox(height: 30.0),
+           Text('* sections are mandatory', style: TextStyle(color: Colors.red)),
+          SizedBox(height: 40.0),
           _titleForItems('Select your state'),
           SizedBox(height: 15),
           _dropDownForState(),
@@ -222,7 +224,7 @@ bool _agreed=false;
                 controller: _pincodeController),
           ),
           SizedBox(height: 30.0),
-             _titleForItems('Email id'),
+             _titleForOptionalItems('Email id'),
           SizedBox(height: 10.0),
           Container(
             color: Colors.white,
@@ -276,7 +278,7 @@ bool _agreed=false;
                 controller: _idController),
           ),
           SizedBox(height: 30.0),
-             _titleForItems('Enter your date of birth'),
+             _titleForOptionalItems('Enter your date of birth'),
           SizedBox(height: 10.0),
           GestureDetector(
             onTap: ()=>_selectDate(context),
@@ -313,6 +315,10 @@ _titleForItems(String title){
      Text('*',style:TextStyle(color:Colors.red)),
   ]);
 }
+
+  _titleForOptionalItems(String title) {
+    return Text(title + ": ");
+  }
 
   _uploadToFirestore() async {
     Firestore.instance.runTransaction((transaction) async {
