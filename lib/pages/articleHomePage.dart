@@ -13,7 +13,7 @@ import 'package:jrm/widgets/aboutJrm.dart';
 import 'package:residemenu/residemenu.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:custom_chewie/custom_chewie.dart';
+import 'package:chewie/chewie.dart';
 import 'package:video_player/video_player.dart';
 
 var cardAspectRatio = 12.0 / 16.0;
@@ -30,6 +30,8 @@ class _ArticleHomePageState extends State<ArticleHomePage>
   Query query, liveQuery;
   List<DocumentSnapshot> documents = [];
   PageController controller;
+  VideoPlayerController _videoPlayerController;
+ChewieController _chewieController;
   double currentPage = 0;
   int length;
 
@@ -60,8 +62,24 @@ class _ArticleHomePageState extends State<ArticleHomePage>
         });
       }
     });
+     _videoPlayerController = VideoPlayerController.network(
+    'https://flutter.github.io/assets-for-api-docs/videos/butterfly.mp4');
+
+_chewieController = ChewieController(
+  videoPlayerController: _videoPlayerController,
+  aspectRatio: 3 / 2,
+  autoPlay: true,
+  looping: true,
+);
     super.initState();
   }
+
+@override
+void dispose() {
+  _videoPlayerController.dispose();
+  _chewieController.dispose();
+  super.dispose();
+}
 
   @override
   Widget build(BuildContext context) {
@@ -283,16 +301,12 @@ class _ArticleHomePageState extends State<ArticleHomePage>
                                     height: 20.0,
                                   ),
                                   GestureDetector(
-                                    onTap: () async {
+                                    onTap: () {
                                       // if (await canLaunch(snap['url']))
                                       //   launch(snap['url']);
-                                       Chewie(
-                                        VideoPlayerController.network(snap['url']
-                                         ),
-                                         aspectRatio: 3 / 2,
-                                         autoPlay: false,
-                                         looping: true,
-                                      );
+                                     return  Expanded(
+                                           child: Center(child: Chewie(controller: _chewieController)),
+                                     );
                                     },
                                     child: Align(
                                       alignment: Alignment.bottomLeft,

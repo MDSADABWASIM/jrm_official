@@ -93,9 +93,6 @@ bool _agreed=false;
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      persistentFooterButtons: <Widget>[
-        Container(color: Colors.orange[50], height: 30)
-      ],
       backgroundColor: Colors.orange[50],
       key: _scaffoldKey,
       appBar: AppBar(
@@ -114,9 +111,9 @@ bool _agreed=false;
       margin: EdgeInsets.all(10.0),
       child: ListView(
         children: <Widget>[
-          SizedBox(height: 30.0),
+          SizedBox(height: 10.0),
            Text('* sections are mandatory', style: TextStyle(color: Colors.red)),
-          SizedBox(height: 40.0),
+          SizedBox(height: 20.0),
           _titleForItems('Select your state'),
           SizedBox(height: 15),
           _dropDownForState(),
@@ -311,13 +308,13 @@ bool _agreed=false;
 _titleForItems(String title){
   return Row(
     children:<Widget>[
-     Text(title+": ",style:Style.detailHeaderTextStyle),
+     Text(title+": ",style:Style.cardHeaderTextStyle),
      Text('*',style:TextStyle(color:Colors.red)),
   ]);
 }
 
   _titleForOptionalItems(String title) {
-    return Text(title + ": ");
+    return Text(title + ": ",style:Style.cardHeaderTextStyle);
   }
 
   _uploadToFirestore() async {
@@ -430,10 +427,10 @@ _titleForItems(String title){
   }
  
  _checkBox(){
- CheckboxListTile(
+return CheckboxListTile(
     title: Text("I agree to abide by all the rules and regulations set by Jamat Raza-E-Mustafa and pledge to remain firm upon the faith and traditions of the Ahle Sunnat (Maslak-E-Alahazrat), as a member of this organization, I shall continually strive to work for the betterment of the islamic nation and community."),
     value: _agreed,
-    onChanged: (newValue) =>_agreed=newValue,
+    onChanged: (newValue) =>setState(()=>_agreed=newValue),
     controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
   );}
  

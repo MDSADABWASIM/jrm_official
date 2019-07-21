@@ -182,9 +182,6 @@ class AddBranchState extends State<AddBranch> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      persistentFooterButtons: <Widget>[
-        Container(color: Colors.orange[50], height: 30)
-      ],
       backgroundColor: Colors.orange[50],
       key: _scaffoldKey,
       appBar: AppBar(
@@ -203,9 +200,9 @@ class AddBranchState extends State<AddBranch> {
       margin: EdgeInsets.all(10.0),
       child: ListView(
         children: <Widget>[
-          SizedBox(height: 30.0),
+          SizedBox(height: 10.0),
           Text('* sections are mandatory', style: TextStyle(color: Colors.red)),
-          SizedBox(height: 40.0),
+          SizedBox(height: 20.0),
           _header('Branch Information'),
           SizedBox(height: 40.0),
           _titleForItems('Select your state'),
@@ -302,6 +299,8 @@ class AddBranchState extends State<AddBranch> {
           ),
           SizedBox(height: 50.0),
           _header('Branch Designation'),
+                    SizedBox(height: 40.0),
+
           _titleForItems('Guiding Alim of the branch'),
           SizedBox(height: 10.0),
           Container(
@@ -705,6 +704,7 @@ class AddBranchState extends State<AddBranch> {
           ),
           SizedBox(height: 50.0),
           _header('Member Information'),
+           SizedBox(height: 40.0),
           _titleForItems('Member 1 name '),
           SizedBox(height: 10.0),
           Container(
@@ -1075,17 +1075,17 @@ class AddBranchState extends State<AddBranch> {
 
   _titleForItems(String title) {
     return Row(children: <Widget>[
-      Text(title + ": ", style: Style.detailHeaderTextStyle),
+      Text(title + ": ", style: Style.cardHeaderTextStyle),
       Text('*', style: TextStyle(color: Colors.red)),
     ]);
   }
 
   _titleForOptionalItems(String title) {
-    return Text(title + ": ");
+    return Text(title + ": ", style: Style.cardHeaderTextStyle);
   }
 
   _header(String text) {
-    return Text(text + ": ", style: Style.cardHeaderTextStyle);
+    return Text(text + ": ", style: Style.detailHeaderTextStyle);
   }
 
   _uploadToFirestore() async {
@@ -1108,46 +1108,46 @@ class AddBranchState extends State<AddBranch> {
         'AlimPhone': prefixText + _guidingAlimPhoneController.text.toString(),
         'AlimName': _guidingAlimNameController.text.toString(),
         'PresidentName': _presidentNameController.text.toString(),
-        'PresidentPhone': _presidentPhoneController.text.toString(),
+        'PresidentPhone':prefixText+ _presidentPhoneController.text.toString(),
         'PresidentEmail': _presidentEmailController.text.toString(),
         'VicePresidentName': _vicepresidentNameController.text.toString(),
-        'VicePresidentPhone': _vicepresidentPhoneController.text.toString(),
+        'VicePresidentPhone': prefixText+_vicepresidentPhoneController.text.toString(),
         'Vice2PresidentName': _vice2presidentNameController.text.toString(),
-        'Vice2PresidentPhone': _vice2presidentPhoneController.text.toString(),
+        'Vice2PresidentPhone': prefixText+_vice2presidentPhoneController.text.toString(),
         'Vice3PresidentName': _vice3presidentNameController.text.toString(),
-        'Vice3PresidentPhone': _vice3presidentPhoneController.text.toString(),
+        'Vice3PresidentPhone':prefixText+ _vice3presidentPhoneController.text.toString(),
         'SecretaryName': _secretaryNameController.text.toString(),
-        'SecretaryPhone': _secretaryPhoneController.text.toString(),
+        'SecretaryPhone': prefixText+_secretaryPhoneController.text.toString(),
         'Joint1SecretaryName': _joint1SecretaryNameController.text.toString(),
-        'Joint1SecretaryPhone': _joint1SecretaryPhoneController.text.toString(),
+        'Joint1SecretaryPhone': prefixText+_joint1SecretaryPhoneController.text.toString(),
         'Joint2SecretaryName': _joint2SecretaryNameController.text.toString(),
-        'Joint2SecretaryPhone': _joint2SecretaryPhoneController.text.toString(),
+        'Joint2SecretaryPhone': prefixText+_joint2SecretaryPhoneController.text.toString(),
         'Joint3SecretaryName': _joint3SecretaryNameController.text.toString(),
-        'Joint3SecretaryPhone': _joint3SecretaryPhoneController.text.toString(),
+        'Joint3SecretaryPhone': prefixText+_joint3SecretaryPhoneController.text.toString(),
         'TreasurerName': _treasurerNameController.text.toString(),
-        'TreasurerPhone': _treasurerPhoneController.text.toString(),
+        'TreasurerPhone': prefixText+_treasurerPhoneController.text.toString(),
         'JointTreasurerName': _jointTreasurerNameController.text.toString(),
-        'JointTreasurerPhone': _jointTreasurerPhoneController.text.toString(),
+        'JointTreasurerPhone':prefixText+ _jointTreasurerPhoneController.text.toString(),
         'Member1Name': _member1NameController.text.toString(),
-        'Member1Phone': _member1PhoneController.text.toString(),
+        'Member1Phone':prefixText+ _member1PhoneController.text.toString(),
         'Member2Name': _member2NameController.text.toString(),
-        'Member2Phone': _member2PhoneController.text.toString(),
+        'Member2Phone':prefixText+_member2PhoneController.text.toString(),
         'Member3Name': _member3NameController.text.toString(),
-        'Member3Phone': _member3PhoneController.text.toString(),
+        'Member3Phone': prefixText+_member3PhoneController.text.toString(),
         'Member4Name': _member4NameController.text.toString(),
-        'Member4Phone': _member4PhoneController.text.toString(),
+        'Member4Phone':prefixText+ _member4PhoneController.text.toString(),
         'Member5Name': _member5NameController.text.toString(),
-        'Member5Phone': _member5PhoneController.text.toString(),
+        'Member5Phone': prefixText+_member5PhoneController.text.toString(),
         'Member6Name': _member6NameController.text.toString(),
-        'Member6Phone': _member6PhoneController.text.toString(),
+        'Member6Phone':prefixText+ _member6PhoneController.text.toString(),
         'Member7Name': _member7NameController.text.toString(),
-        'Member7Phone': _member7PhoneController.text.toString(),
+        'Member7Phone': prefixText+_member7PhoneController.text.toString(),
         'Member8Name': _member8NameController.text.toString(),
-        'Member8Phone': _member8PhoneController.text.toString(),
+        'Member8Phone':prefixText+_member8PhoneController.text.toString(),
         'Member9Name': _member9NameController.text.toString(),
-        'Member9Phone': _member9PhoneController.text.toString(),
+        'Member9Phone':prefixText+ _member9PhoneController.text.toString(),
         'Member10Name': _member10NameController.text.toString(),
-        'Member10Phone': _member10PhoneController.text.toString(),
+        'Member10Phone':prefixText+ _member10PhoneController.text.toString(),
         'tag': ''
       });
     }).whenComplete(() {

@@ -5,7 +5,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:jrm/pages/shajraList.dart';
 import 'package:jrm/widgets/privacyPolicy.dart';
 import 'package:jrm/widgets/terms.dart';
 import 'package:package_info/package_info.dart';
