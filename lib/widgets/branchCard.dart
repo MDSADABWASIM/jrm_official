@@ -2,10 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jrm/admin/branchDetail.dart';
-import 'package:jrm/pages/articleDetail.dart';
 import 'package:jrm/util/textStyle.dart';
 
-_cardElements(String title,String desc) {
+
+
+String _date(int date){
+DateTime now=DateTime.fromMillisecondsSinceEpoch(date);
+String newDate= ('${now.day}/${now.month}/${now.year}');
+return newDate;
+}
+
+
+_cardElements(String title,String date) {
   return Container(
     margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
     constraints: BoxConstraints.expand(),
@@ -23,12 +31,7 @@ _cardElements(String title,String desc) {
         SizedBox(
           height: 10.0,
         ),
-          Text(
-          desc,
-          style: Style.cardBodyTextStyle,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+       Text('Requested on: $date',overflow: TextOverflow.ellipsis),
       ],
     ),
   );
@@ -60,8 +63,10 @@ class BranchCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardElements = _cardElements(document['title'],document['desc']);
+     final date=_date(document['createdAt']);
+    final cardElements = _cardElements(document['branchType'],date);
     return GestureDetector(
+      onLongPress: ()=>_showDeleteDialog(context, document['id']),
       onTap: () => Navigator.push(
           context,
           CupertinoPageRoute(
@@ -75,4 +80,48 @@ class BranchCard extends StatelessWidget {
       ),
     );
   }
+
+
+  _showDeleteDialog(BuildContext context,String id) {
+   AlertDialog  alert= AlertDialog(
+      title: Text("Delete this Branch request?"),
+      content: Text("Deleting this article will delete this from everywhere."),
+      actions: [
+        RaisedButton(
+          child: Text(
+            "Cancel",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          color: Color.fromRGBO(0, 179, 134, 1.0),
+          shape: OutlineInputBorder(borderSide: BorderSide.none),
+        ),
+         RaisedButton(
+          child: Text(
+            "Delete",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () async{
+            Navigator.of(context).pop();
+           await _deleteCampaign(id,context);
+             },
+          shape: OutlineInputBorder(borderSide: BorderSide.none),
+          color: Colors.red[300],
+        )
+      ],
+    );
+
+  return showDialog(
+     context: context,
+     builder: (context)=>alert
+   );
+   }
+
+  _deleteCampaign(String id,BuildContext context) async {
+     await Firestore.instance
+        .collection('Branch')
+        .document('$id')
+        .delete()
+      .whenComplete(() => Navigator.pop(context));
+    }
 }
