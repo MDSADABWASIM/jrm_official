@@ -1,8 +1,12 @@
 import 'dart:math';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' ;
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:jrm/chat/app_chat.dart';
+import 'package:jrm/models/data.dart';
+import 'package:jrm/models/fbconn.dart';
 import 'package:jrm/pages/allArticlesPage.dart';
 import 'package:jrm/pages/allLivePage.dart';
 import 'package:jrm/pages/articleDetail.dart';
@@ -13,8 +17,6 @@ import 'package:jrm/widgets/aboutJrm.dart';
 import 'package:residemenu/residemenu.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:chewie/chewie.dart';
-import 'package:video_player/video_player.dart';
 
 var cardAspectRatio = 12.0 / 16.0;
 var widgetAspectRatio = cardAspectRatio * 1.2;
@@ -27,11 +29,11 @@ class ArticleHomePage extends StatefulWidget {
 class _ArticleHomePageState extends State<ArticleHomePage>
     with TickerProviderStateMixin {
   MenuController _menuController;
-  Query query, liveQuery;
+  var query, liveQuery;
+  int msgCount = 0;
   List<DocumentSnapshot> documents = [];
   PageController controller;
-  VideoPlayerController _videoPlayerController;
-ChewieController _chewieController;
+
   double currentPage = 0;
   int length;
 
@@ -62,24 +64,10 @@ ChewieController _chewieController;
         });
       }
     });
-     _videoPlayerController = VideoPlayerController.network(
-    'https://flutter.github.io/assets-for-api-docs/videos/butterfly.mp4');
-
-_chewieController = ChewieController(
-  videoPlayerController: _videoPlayerController,
-  aspectRatio: 3 / 2,
-  autoPlay: true,
-  looping: true,
-);
+  _getUnReadMSG();
     super.initState();
   }
 
-@override
-void dispose() {
-  _videoPlayerController.dispose();
-  _chewieController.dispose();
-  super.dispose();
-}
 
   @override
   Widget build(BuildContext context) {
@@ -301,12 +289,9 @@ void dispose() {
                                     height: 20.0,
                                   ),
                                   GestureDetector(
-                                    onTap: () {
-                                      // if (await canLaunch(snap['url']))
-                                      //   launch(snap['url']);
-                                     return  Expanded(
-                                           child: Center(child: Chewie(controller: _chewieController)),
-                                     );
+                                    onTap: () async{
+                                      if (await canLaunch(snap['url']))
+                                        launch(snap['url']);
                                     },
                                     child: Align(
                                       alignment: Alignment.bottomLeft,
@@ -400,7 +385,7 @@ MenuScaffold _menuScaffold(){
         ),
         children: <Widget>[
           new Material(
-            color: Colors.transparent,
+            color: Colors.black,
             child: new InkWell(
               child: ResideMenuItem(
                 title: 'Settings',
@@ -414,7 +399,7 @@ MenuScaffold _menuScaffold(){
             ),
           ),
            new Material(
-            color: Colors.transparent,
+              color: Colors.black,
             child: new InkWell(
               child: ResideMenuItem(
                 title: 'Shajra List',
@@ -428,7 +413,7 @@ MenuScaffold _menuScaffold(){
             ),
           ),
           new Material(
-            color: Colors.transparent,
+             color: Colors.black,
             child: new InkWell(
               child: ResideMenuItem(
                 title: 'About App Dev',
@@ -442,7 +427,7 @@ MenuScaffold _menuScaffold(){
             ),
           ),
          new Material(
-            color: Colors.transparent,
+              color: Colors.black,
             child: new InkWell(
               child: ResideMenuItem(
                 title: 'About JRM',
@@ -455,7 +440,7 @@ MenuScaffold _menuScaffold(){
             ),
           ),
          new Material(
-            color: Colors.transparent,
+              color: Colors.black,
             child: new InkWell(
               child: ResideMenuItem(
                 title: 'Share the App',
@@ -464,10 +449,54 @@ MenuScaffold _menuScaffold(){
               onTap: () => _sharer(),
             ),
           ),
+             ListTile(
+            title: Row(children: [
+              Text("Messages"),
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: CircleAvatar(
+                    radius: 10.0,
+                    backgroundColor: Colors.yellow[400],
+                    child: Text(
+                      msgCount.toString(),
+                      style: TextStyle(color: Colors.black, fontSize: 12.0),
+                    )),
+              )
+            ]),
+            onTap: () {
+                Navigator.of(context).push(CupertinoPageRoute(
+                  builder: (context) => AppChat(),
+                ));}
+             ),
         ],
       );
 }
-}
+
+ _getUnReadMSG() async {
+    final msgRef = FirebaseDatabase.instance
+        .reference()
+        .child(AppData.messagesDB)
+        .child(AppData.id);
+
+    msgRef.onValue.listen((event) {
+      if (event.snapshot.value == null) {
+        msgCount = 0;
+        return;
+      }
+      Map valFav = event.snapshot.value;
+      FbConn fbConn = FbConn(valFav);
+      for (int s = 0; s < fbConn.getDataSize(); s++) {
+        if (fbConn.getMessageRead()[s] == false &&
+            fbConn.getMessageSenderIDasList()[s] != AppData.currentUserID) {
+          msgCount = msgCount + 1;
+        }
+      }
+
+      if (msgCount > 0) {
+      }
+    });
+  }
+    }
 
 class CardScrollWidget extends StatelessWidget {
   final currentPage;

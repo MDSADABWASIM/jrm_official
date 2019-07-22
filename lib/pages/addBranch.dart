@@ -1151,7 +1151,8 @@ class AddBranchState extends State<AddBranch> {
         'tag': ''
       });
     }).whenComplete(() {
-      Navigator.pop(context, 'success');
+     showInSnackBar(value: 'Branch request successfully sent.',color: Colors.green[400]);
+     Future.delayed(Duration(seconds: 2),()=>Navigator.pop(context));
     });
   }
 
@@ -1241,7 +1242,7 @@ class AddBranchState extends State<AddBranch> {
       return;
     }
     if (_joint1SecretaryNameController.text == '') {
-      showInSnackBar(value: 'Enter TheJoint  Secretary Name');
+      showInSnackBar(value: 'Enter The Joint  Secretary Name');
       return;
     }
     if (_joint1SecretaryPhoneController.text == '') {

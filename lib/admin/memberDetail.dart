@@ -19,6 +19,7 @@ class MemberDetails extends StatelessWidget {
 
   _body() {
     return ListView(
+      padding: EdgeInsets.all(8),
       children: <Widget>[
         SizedBox(height: 30),
         _title('Member name :'),
@@ -74,6 +75,6 @@ class MemberDetails extends StatelessWidget {
   }
 
   _title(String text) {
-    return Text(text, style: Style.detailHeaderTextStyle);
+    return Text(text, style: Style.cardHeaderTextStyle);
   }
 }

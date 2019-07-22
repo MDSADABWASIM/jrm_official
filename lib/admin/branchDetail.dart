@@ -15,6 +15,7 @@ final  DocumentSnapshot document;
 
   _body(){
     return ListView(
+      padding: EdgeInsets.all(8),
       children: <Widget>[
         SizedBox(height: 30),
         _header('Branch information'),
@@ -228,10 +229,10 @@ final  DocumentSnapshot document;
   }
 
     _title(String text){
-    return Text(text,style:Style.detailHeaderTextStyle);
+    return Text(text,style:Style.cardHeaderTextStyle);
   }
 
   _header(String text){
-    return Text(text,style:Style.cardHeaderTextStyle);
+    return Text(text,style:Style.detailHeaderTextStyle);
   }
 }

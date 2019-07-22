@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -8,10 +7,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:jrm/widgets/privacyPolicy.dart';
 import 'package:jrm/widgets/terms.dart';
 import 'package:package_info/package_info.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart' as urlLauncher;
-import 'package:http/http.dart' as http;
 
 class Setting extends StatefulWidget {
   @override
@@ -205,9 +202,9 @@ class SettingState extends State<Setting> {
       onChanged: (value) {
         allNotificationEnabled = value;
         if (allNotificationEnabled) {
-          _saveSharedprefs('LocalNotifs', _notificationEnabled);
-          _saveSharedprefs('notifs', _notificationEnabled);
-          _saveSharedprefs('AzanNotifs', _notificationEnabled);
+          _saveSharedprefs('LocalNotifs', allNotificationEnabled);
+          _saveSharedprefs('notifs', allNotificationEnabled);
+          _saveSharedprefs('AzanNotifs', allNotificationEnabled);
           firebaseMessaging.subscribeToTopic('notifs');
           firebaseMessaging.subscribeToTopic('LiveNotifs');
           _showDailyAtFazarTime();
@@ -220,9 +217,9 @@ class SettingState extends State<Setting> {
           _notificationEnabled = true;
           setState(() {});
         } else {
-          _saveSharedprefs('LocalNotifs', _notificationEnabled);
-          _saveSharedprefs('notifs', _notificationEnabled);
-          _saveSharedprefs('AzanNotifs', _notificationEnabled);
+          _saveSharedprefs('LocalNotifs', allNotificationEnabled);
+          _saveSharedprefs('notifs', allNotificationEnabled);
+          _saveSharedprefs('AzanNotifs', allNotificationEnabled);
           firebaseMessaging.unsubscribeFromTopic('notifs');
           firebaseMessaging.unsubscribeFromTopic('LiveNotifs');
           _cancelAllNotifications();
@@ -241,14 +238,14 @@ class SettingState extends State<Setting> {
       onChanged: (value) {
         azanNotificationEnabled = value;
         if (azanNotificationEnabled) {
-          _saveSharedprefs('AzanNotifs', _notificationEnabled);
+          _saveSharedprefs('AzanNotifs', azanNotificationEnabled);
           _showDailyAtFazarTime();
            _showDailyAtZoharTime();
           _showDailyAtAsarTime();
           _showDailyAtMaghribTime();
           _showDailyAtIsaTime();
         } else {
-          _saveSharedprefs('AzanNotifs', _notificationEnabled);
+          _saveSharedprefs('AzanNotifs', azanNotificationEnabled);
           _cancelAzanNotification();
         }
       },
@@ -299,7 +296,11 @@ class SettingState extends State<Setting> {
   }
 
   Future<void> _cancelAzanNotification() async {
-    await flutterLocalNotificationsPlugin.cancel(0);
+    await flutterLocalNotificationsPlugin.cancel(1);
+    await flutterLocalNotificationsPlugin.cancel(2);
+    await flutterLocalNotificationsPlugin.cancel(3);
+    await flutterLocalNotificationsPlugin.cancel(4);
+    await flutterLocalNotificationsPlugin.cancel(5);
   }
 
   Future<void> onSelectNotification(String payload) async {
@@ -332,7 +333,7 @@ class SettingState extends State<Setting> {
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.showDailyAtTime(0, 'Fazar namaz is here',
+    await flutterLocalNotificationsPlugin.showDailyAtTime(1, 'Fazar namaz is here',
         'It\'s time to wake up for fazar namaz', time, platformChannelSpecifics);
   }
 
@@ -345,7 +346,7 @@ class SettingState extends State<Setting> {
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.showDailyAtTime(0, 'Zohar namaz is here',
+    await flutterLocalNotificationsPlugin.showDailyAtTime(2, 'Zohar namaz is here',
         'It\'s time for zohar namaz', time, platformChannelSpecifics);
   }
 
@@ -358,7 +359,7 @@ class SettingState extends State<Setting> {
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.showDailyAtTime(0, 'Asar namaz is here',
+    await flutterLocalNotificationsPlugin.showDailyAtTime(3, 'Asar namaz is here',
         'Don\'t forget to pray on asar', time, platformChannelSpecifics);
   }
 
@@ -371,7 +372,7 @@ class SettingState extends State<Setting> {
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.showDailyAtTime(0, 'Maghrib time is here',
+    await flutterLocalNotificationsPlugin.showDailyAtTime(4, 'Maghrib time is here',
         'Hurry up for maghrib namaz', time, platformChannelSpecifics);
   }
 
@@ -384,7 +385,7 @@ class SettingState extends State<Setting> {
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.showDailyAtTime(0, 'It\'s Isa time',
+    await flutterLocalNotificationsPlugin.showDailyAtTime(5, 'It\'s Isa time',
         'It\'s time  for isa namaz', time, platformChannelSpecifics);
   }
 
@@ -398,7 +399,7 @@ class SettingState extends State<Setting> {
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
-        1,
+        6,
         'Jumma Mubarak',
         'Do not forget for namaz',
         Day.Friday,
@@ -406,41 +407,7 @@ class SettingState extends State<Setting> {
         platformChannelSpecifics);
   }
 
-  Future<String> _downloadAndSaveImage(String url, String fileName) async {
-    var directory = await getApplicationDocumentsDirectory();
-    var filePath = '${directory.path}/$fileName';
-    var response = await http.get(url);
-    var file = File(filePath);
-    await file.writeAsBytes(response.bodyBytes);
-    return filePath;
-  }
-
-  Future<void> _showBigPictureNotificationHideExpandedLargeIcon() async {
-    var largeIconPath = await _downloadAndSaveImage(
-        'http://via.placeholder.com/48x48', 'largeIcon');
-    var bigPicturePath = await _downloadAndSaveImage(
-        'http://via.placeholder.com/400x800', 'bigPicture');
-    var bigPictureStyleInformation = BigPictureStyleInformation(
-        bigPicturePath, BitmapSource.FilePath,
-        hideExpandedLargeIcon: true,
-        contentTitle: 'overridden <b>big</b> content title',
-        htmlFormatContentTitle: true,
-        summaryText: 'summary <i>text</i>',
-        htmlFormatSummaryText: true);
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'big text channel id',
-        'big text channel name',
-        'big text channel description',
-        largeIcon: largeIconPath,
-        largeIconBitmapSource: BitmapSource.FilePath,
-        style: AndroidNotificationStyle.BigPicture,
-        styleInformation: bigPictureStyleInformation);
-    var platformChannelSpecifics =
-        NotificationDetails(androidPlatformChannelSpecifics, null);
-    await flutterLocalNotificationsPlugin.show(
-        0, 'big text title', 'silent body', platformChannelSpecifics);
-  }
-
+ 
   Future<void> onDidReceiveLocalNotification(
       int id, String title, String body, String payload) async {
     await showDialog(
@@ -473,3 +440,40 @@ class _LinkTextSpan extends TextSpan {
                 urlLauncher.launch(url);
               });
 }
+
+
+
+ // Future<String> _downloadAndSaveImage(String url, String fileName) async {
+  //   var directory = await getApplicationDocumentsDirectory();
+  //   var filePath = '${directory.path}/$fileName';
+  //   var response = await http.get(url);
+  //   var file = File(filePath);
+  //   await file.writeAsBytes(response.bodyBytes);
+  //   return filePath;
+  // }
+
+  // Future<void> _showBigPictureNotificationHideExpandedLargeIcon() async {
+  //   var largeIconPath = await _downloadAndSaveImage(
+  //       'http://via.placeholder.com/48x48', 'largeIcon');
+  //   var bigPicturePath = await _downloadAndSaveImage(
+  //       'http://via.placeholder.com/400x800', 'bigPicture');
+  //   var bigPictureStyleInformation = BigPictureStyleInformation(
+  //       bigPicturePath, BitmapSource.FilePath,
+  //       hideExpandedLargeIcon: true,
+  //       contentTitle: 'overridden <b>big</b> content title',
+  //       htmlFormatContentTitle: true,
+  //       summaryText: 'summary <i>text</i>',
+  //       htmlFormatSummaryText: true);
+  //   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+  //       'big text channel id',
+  //       'big text channel name',
+  //       'big text channel description',
+  //       largeIcon: largeIconPath,
+  //       largeIconBitmapSource: BitmapSource.FilePath,
+  //       style: AndroidNotificationStyle.BigPicture,
+  //       styleInformation: bigPictureStyleInformation);
+  //   var platformChannelSpecifics =
+  //       NotificationDetails(androidPlatformChannelSpecifics, null);
+  //   await flutterLocalNotificationsPlugin.show(
+  //       0, 'big text title', 'silent body', platformChannelSpecifics);
+  // }

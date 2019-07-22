@@ -39,7 +39,6 @@ _cardElements(String title,String date) {
 
 final _card = Container(
   height: 100.0,
-  margin: EdgeInsets.only(left: 46.0),
   decoration: BoxDecoration(
     color: Colors.white,
     shape: BoxShape.rectangle,

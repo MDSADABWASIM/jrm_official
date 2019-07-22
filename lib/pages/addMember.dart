@@ -342,7 +342,8 @@ _titleForItems(String title){
         'tag':''
       });
     }).whenComplete(() {
-      Navigator.pop(context, 'success');
+      showInSnackBar(value: 'Member request successfully sent.',color: Colors.green[400]);
+     Future.delayed(Duration(seconds: 2),()=>Navigator.pop(context));
     });
   }
 
@@ -389,10 +390,6 @@ _titleForItems(String title){
     }
     if (_pincodeController.text == ''||_pincodeController.text==pincodeHint) {
       showInSnackBar(value: pincodeHint);
-      return;
-    }
-     if (_emailController.text == ''||_emailController.text==emailHint) {
-      showInSnackBar(value: emailHint);
       return;
     }
      if (_phoneController.text == ''||_phoneController.text==phoneHint) {

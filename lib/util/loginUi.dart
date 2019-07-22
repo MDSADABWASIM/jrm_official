@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +5,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:jrm/pages/home.dart';
 import 'package:jrm/util/auth.dart';
 import 'package:jrm/widgets/terms.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginUI extends StatefulWidget {
@@ -144,7 +141,7 @@ class _LoginUIState extends State<LoginUI> {
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.showWeeklyAtDayAndTime(
-        1,
+        6,
         'Jumma Mubarak',
         'Do not forget for namaz',
         Day.Friday,
@@ -152,40 +149,40 @@ class _LoginUIState extends State<LoginUI> {
         platformChannelSpecifics);
   }
 
-  Future<String> _downloadAndSaveImage(String url, String fileName) async {
-    var directory = await getApplicationDocumentsDirectory();
-    var filePath = '${directory.path}/$fileName';
-    var response = await http.get(url);
-    var file = File(filePath);
-    await file.writeAsBytes(response.bodyBytes);
-    return filePath;
-  }
+  // Future<String> _downloadAndSaveImage(String url, String fileName) async {
+  //   var directory = await getApplicationDocumentsDirectory();
+  //   var filePath = '${directory.path}/$fileName';
+  //   var response = await http.get(url);
+  //   var file = File(filePath);
+  //   await file.writeAsBytes(response.bodyBytes);
+  //   return filePath;
+  // }
 
-  Future<void> _showBigPictureNotificationHideExpandedLargeIcon() async {
-    var largeIconPath = await _downloadAndSaveImage(
-        'http://via.placeholder.com/48x48', 'largeIcon');
-    var bigPicturePath = await _downloadAndSaveImage(
-        'http://via.placeholder.com/400x800', 'bigPicture');
-    var bigPictureStyleInformation = BigPictureStyleInformation(
-        bigPicturePath, BitmapSource.FilePath,
-        hideExpandedLargeIcon: true,
-        contentTitle: 'overridden <b>big</b> content title',
-        htmlFormatContentTitle: true,
-        summaryText: 'summary <i>text</i>',
-        htmlFormatSummaryText: true);
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'big text channel id',
-        'big text channel name',
-        'big text channel description',
-        largeIcon: largeIconPath,
-        largeIconBitmapSource: BitmapSource.FilePath,
-        style: AndroidNotificationStyle.BigPicture,
-        styleInformation: bigPictureStyleInformation);
-    var platformChannelSpecifics =
-        NotificationDetails(androidPlatformChannelSpecifics, null);
-    await flutterLocalNotificationsPlugin.show(
-        0, 'big text title', 'silent body', platformChannelSpecifics);
-  }
+  // Future<void> _showBigPictureNotificationHideExpandedLargeIcon() async {
+  //   var largeIconPath = await _downloadAndSaveImage(
+  //       'http://via.placeholder.com/48x48', 'largeIcon');
+  //   var bigPicturePath = await _downloadAndSaveImage(
+  //       'http://via.placeholder.com/400x800', 'bigPicture');
+  //   var bigPictureStyleInformation = BigPictureStyleInformation(
+  //       bigPicturePath, BitmapSource.FilePath,
+  //       hideExpandedLargeIcon: true,
+  //       contentTitle: 'overridden <b>big</b> content title',
+  //       htmlFormatContentTitle: true,
+  //       summaryText: 'summary <i>text</i>',
+  //       htmlFormatSummaryText: true);
+  //   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+  //       'big text channel id',
+  //       'big text channel name',
+  //       'big text channel description',
+  //       largeIcon: largeIconPath,
+  //       largeIconBitmapSource: BitmapSource.FilePath,
+  //       style: AndroidNotificationStyle.BigPicture,
+  //       styleInformation: bigPictureStyleInformation);
+  //   var platformChannelSpecifics =
+  //       NotificationDetails(androidPlatformChannelSpecifics, null);
+  //   await flutterLocalNotificationsPlugin.show(
+  //       0, 'big text title', 'silent body', platformChannelSpecifics);
+  // }
 
   Future<void> onDidReceiveLocalNotification(
       int id, String title, String body, String payload) async {
