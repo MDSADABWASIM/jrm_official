@@ -8,7 +8,7 @@ import 'package:jrm/admin/AdminLives.dart';
 import 'package:jrm/admin/AdminTimings.dart';
 import 'package:jrm/admin/BranchRequest.dart';
 import 'package:jrm/admin/MemberRequest.dart';
-import 'package:jrm/chat/support_chat.dart';
+import 'package:jrm/chat/chat_screen.dart';
 
 class AdminHomepage extends StatefulWidget {
   @override
@@ -35,7 +35,7 @@ class _AdminHomepageState extends State<AdminHomepage> {
 
   _adminHome(BuildContext context) {
     return ListView(padding: EdgeInsets.all(8), children: [
-        _listTile(EvaIcons.messageCircleOutline, 'Chat request', AdminChats(), context),
+        _listTile(EvaIcons.messageCircleOutline, 'Chat request', ChatScreen(), context),
       _divider,
       _listTile(EvaIcons.bookOutline, 'Articles', AdminArticlesPage(), context),
       _divider,

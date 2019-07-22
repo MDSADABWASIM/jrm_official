@@ -73,8 +73,11 @@ class _ArticleHomePageState extends State<ArticleHomePage>
   Widget build(BuildContext context) {
     return new ResideMenu.scaffold(
       decoration: new BoxDecoration(
-          image: new DecorationImage(
-              image: new AssetImage("assets/kaaba.png"), fit: BoxFit.cover)),
+        color: Colors.black
+          // image: new DecorationImage(
+          //     image: new AssetImage("assets/kaaba.png"), fit: BoxFit.cover)
+              ),
+      
       controller: _menuController,
       leftScaffold: _menuScaffold(),
       child: Container(
@@ -449,24 +452,31 @@ MenuScaffold _menuScaffold(){
               onTap: () => _sharer(),
             ),
           ),
-             ListTile(
+             Material(
+                color: Colors.black,
+                            child: ListTile(
+                 leading:  Padding(
+                   padding: const EdgeInsets.only(left:22.0),
+                   child: const Icon(Icons.message, color: Colors.white),
+                 ),
             title: Row(children: [
-              Text("Messages"),
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: CircleAvatar(
-                    radius: 10.0,
-                    backgroundColor: Colors.yellow[400],
-                    child: Text(
-                      msgCount.toString(),
-                      style: TextStyle(color: Colors.black, fontSize: 12.0),
-                    )),
-              )
+                Text("    Messages",style: TextStyle(color: Colors.white, fontSize: 15.0),),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: CircleAvatar(
+                      radius: 10.0,
+                      backgroundColor: Colors.yellow[400],
+                      child: Text(
+                        msgCount.toString(),
+                        style: TextStyle(color: Colors.black, fontSize: 12.0),
+                      )),
+                )
             ]),
             onTap: () {
-                Navigator.of(context).push(CupertinoPageRoute(
-                  builder: (context) => AppChat(),
-                ));}
+                  Navigator.of(context).push(CupertinoPageRoute(
+                    builder: (context) => AppChat(),
+                  ));}
+               ),
              ),
         ],
       );

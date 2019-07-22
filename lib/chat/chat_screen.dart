@@ -250,6 +250,7 @@ class ChatScreenState extends State<ChatScreen> {
     );
 
     return Scaffold(
+      appBar: AppBar(title: Text('Chats'),centerTitle: true,),
       key: scaffoldKey,
       backgroundColor: Colors.white,
       body: streamBuilder,
