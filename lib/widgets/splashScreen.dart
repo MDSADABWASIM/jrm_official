@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:jrm/models/data.dart';
 import 'package:jrm/pages/LoginPage.dart';
 import 'package:jrm/pages/home.dart';
 import 'package:jrm/widgets/onboarding_circle.dart';
@@ -18,6 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
     SharedPreferences preference = await SharedPreferences.getInstance();
     bool _seen = (preference.getBool('seen') ?? false);
     FirebaseUser user = Provider.of<FirebaseUser>(context);
+     AppData.id = user.uid;
     if (_seen) {
       if (user != null) {
         Navigator.of(context).pushReplacement(

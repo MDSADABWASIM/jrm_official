@@ -334,7 +334,7 @@ class SettingState extends State<Setting> {
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.showDailyAtTime(1, 'Fazar namaz is here',
-        'It\'s time to wake up for fazar namaz', time, platformChannelSpecifics);
+        'It\'s time to wake up for fazar namaz', time, platformChannelSpecifics,payload: 'Wake up and start your day with namaz');
   }
 
     Future<void> _showDailyAtZoharTime() async {
@@ -347,7 +347,7 @@ class SettingState extends State<Setting> {
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.showDailyAtTime(2, 'Zohar namaz is here',
-        'It\'s time for zohar namaz', time, platformChannelSpecifics);
+        'It\'s time for zohar namaz', time, platformChannelSpecifics,payload: 'It is zohar time, do not forget for namaz');
   }
 
     Future<void> _showDailyAtAsarTime() async {
@@ -360,7 +360,7 @@ class SettingState extends State<Setting> {
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.showDailyAtTime(3, 'Asar namaz is here',
-        'Don\'t forget to pray on asar', time, platformChannelSpecifics);
+        'Don\'t forget to pray on asar', time, platformChannelSpecifics,payload: 'Even if you are busy, just do the Asar prayer on time. ');
   }
 
     Future<void> _showDailyAtMaghribTime() async {
@@ -373,7 +373,7 @@ class SettingState extends State<Setting> {
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.showDailyAtTime(4, 'Maghrib time is here',
-        'Hurry up for maghrib namaz', time, platformChannelSpecifics);
+        'Hurry up for maghrib namaz', time, platformChannelSpecifics,payload: 'Do not forget to do maghrib prayer.');
   }
 
     Future<void> _showDailyAtIsaTime() async {
@@ -386,7 +386,7 @@ class SettingState extends State<Setting> {
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.showDailyAtTime(5, 'It\'s Isa time',
-        'It\'s time  for isa namaz', time, platformChannelSpecifics);
+        'It\'s time  for isa namaz', time, platformChannelSpecifics,payload: 'Do Isa namaz in time.');
   }
 
   Future<void> _showWeeklyAtDayAndTime() async {
@@ -404,7 +404,7 @@ class SettingState extends State<Setting> {
         'Do not forget for namaz',
         Day.Friday,
         time,
-        platformChannelSpecifics);
+        platformChannelSpecifics,payload: 'Jumma mubarak, remember us in your Dua.');
   }
 
  
