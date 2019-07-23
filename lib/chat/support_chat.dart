@@ -56,7 +56,7 @@ class _AdminChatsState extends State<AdminChats> {
     return Scaffold(
         appBar: AppBar(
           brightness: Brightness.dark,
-          title: Text("Chats"),
+          title: Text("Chat"),
           elevation: 4.0,
         ),
         body: Container(

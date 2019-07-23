@@ -14,7 +14,7 @@ class Style {
   static final detailHeaderTextStyle = baseDecoratedTextStyle.copyWith(
       color: Color(0xFF2B2B52), fontSize: 22.0, fontWeight: FontWeight.w600);
   static final profileNameTextStyle = baseDecoratedTextStyle.copyWith(
-      color: Color(0xFF019031), fontSize: 20.0, fontWeight: FontWeight.w600);
+      color: Color(0xFF019031), fontSize: 22.0, fontWeight: FontWeight.w600);
   static final linkStyle = detailBodyTextStyle.copyWith(color: Colors.blue);
   static final highlightStyle = baseDecoratedTextStyle.copyWith(
       fontWeight: FontWeight.w500, fontSize: 20.0, color: Color(0xff37474f));

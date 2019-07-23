@@ -94,7 +94,8 @@ class _ChatsState extends State<AppChat> with AfterLayoutMixin<AppChat>{
     return new Scaffold(
         appBar: new AppBar(
           brightness: Brightness.dark,
-          title: new Text("Chat us"),
+          title: new Text("Chat with us",),
+          centerTitle: true,
           elevation:
               Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
         ),
