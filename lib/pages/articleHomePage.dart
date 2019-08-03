@@ -73,7 +73,7 @@ class _ArticleHomePageState extends State<ArticleHomePage>
   Widget build(BuildContext context) {
     return new ResideMenu.scaffold(
       decoration: new BoxDecoration(
-        color: Colors.black
+        color: Color(0xFF2d3447)
           // image: new DecorationImage(
           //     image: new AssetImage("assets/kaaba.png"), fit: BoxFit.cover)
               ),
@@ -387,8 +387,8 @@ MenuScaffold _menuScaffold(){
           ),
         ),
         children: <Widget>[
-          new Material(
-            color: Colors.black,
+           Material(
+            color:Color(0xFF2d3447),
             child: new InkWell(
               child: ResideMenuItem(
                 title: 'Settings',
@@ -401,8 +401,8 @@ MenuScaffold _menuScaffold(){
               },
             ),
           ),
-           new Material(
-              color: Colors.black,
+            Material(
+              color: Color(0xFF2d3447),
             child: new InkWell(
               child: ResideMenuItem(
                 title: 'Shajra List',
@@ -415,8 +415,8 @@ MenuScaffold _menuScaffold(){
               },
             ),
           ),
-          new Material(
-             color: Colors.black,
+           Material(
+             color:Color(0xFF2d3447),
             child: new InkWell(
               child: ResideMenuItem(
                 title: 'About App Dev',
@@ -429,8 +429,8 @@ MenuScaffold _menuScaffold(){
               },
             ),
           ),
-         new Material(
-              color: Colors.black,
+          Material(
+              color: Color(0xFF2d3447),
             child: new InkWell(
               child: ResideMenuItem(
                 title: 'About JRM',
@@ -442,8 +442,8 @@ MenuScaffold _menuScaffold(){
                 ));}
             ),
           ),
-         new Material(
-              color: Colors.black,
+          Material(
+              color: Color(0xFF2d3447),
             child: new InkWell(
               child: ResideMenuItem(
                 title: 'Share the App',
@@ -453,7 +453,7 @@ MenuScaffold _menuScaffold(){
             ),
           ),
              Material(
-                color: Colors.black,
+                color:Color(0xFF2d3447),
                             child: ListTile(
                  leading:  Padding(
                    padding: const EdgeInsets.only(left:22.0),

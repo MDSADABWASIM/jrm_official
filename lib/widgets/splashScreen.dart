@@ -19,9 +19,9 @@ class _SplashScreenState extends State<SplashScreen> {
     SharedPreferences preference = await SharedPreferences.getInstance();
     bool _seen = (preference.getBool('seen') ?? false);
     FirebaseUser user = Provider.of<FirebaseUser>(context);
-     AppData.id = user.uid;
     if (_seen) {
       if (user != null) {
+        AppData.id = user.uid;
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(builder: (context) => Home()));
       } else {
@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    new Timer(new Duration(milliseconds: 1500), () {
+   Timer( Duration(milliseconds: 1500), () {
       checkFirstSeen();
     });
   }
