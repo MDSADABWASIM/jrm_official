@@ -98,8 +98,9 @@ class _CompassState extends State<Compass> {
   void initState() {
     super.initState();
 final now = DateTime.now();
-final yesterday = DateTime(now.year, now.month, now.day - 1);
-    _today = ummAlquraCalendar.fromDate(yesterday);
+// final yesterday = DateTime(now.year, now.month, now.day - 1);
+final today = DateTime(now.year, now.month, now.day);
+    _today = ummAlquraCalendar.fromDate(today);
     compass = AniControl([
       Anim('dir', 0, 360, 45, true),
       Anim('hor', -9.6, 9.6, 20, false),

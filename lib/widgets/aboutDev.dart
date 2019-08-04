@@ -13,8 +13,7 @@ class AboutDev extends StatefulWidget {
 
 class _AboutDevState extends State<AboutDev> {
   List<String> itemContent = [
-    'Assalam-o-Alaikum,\nMy name is Mohammad sadab wasim, I am an android app developer, I have published  many apps in playstore till now. If you have any business/organization/ideas  and you want to build an app for it, then feel free to contact me, I will build the app in the lowest price possible, and if your organisation is a Non profit organisation then I will even do it for free. ' +
-        '\n\nThanks!',
+    'Assalam-o-Alaikum,\nMy name is Mohammad sadab wasim, I am an android app developer, I have published  many apps in playstore till now. If you have any business/organization/ideas  and you want to build an app for it, then feel free to contact me, I will build the app in the lowest price possible, and if your organisation is a Non profit organisation then I will even do it for free. ' ,
   ]; //the text in the tile
 
   @override
@@ -161,7 +160,6 @@ class _AboutDevState extends State<AboutDev> {
                 ],
               ),
             ),
-            SizedBox(height: 25.0),
           ],
         ),
       ),
