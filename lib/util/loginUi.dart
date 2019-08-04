@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:jrm/models/data.dart';
 import 'package:jrm/pages/home.dart';
 import 'package:jrm/util/auth.dart';
 import 'package:jrm/widgets/terms.dart';
@@ -76,7 +78,8 @@ class _LoginUIState extends State<LoginUI> {
               _saveSharedprefs('notifs', true);
               _saveSharedprefs('AzanNotifs', true);
               _saveSharedprefs('LocalNotifs', true);
-              await Auth(context).signIn();
+              FirebaseUser user = await Auth(context).signIn();
+             if(user!=null){ AppData.id = user.uid;}
               Navigator.of(context).pushReplacement(CupertinoPageRoute(
                 builder: (context) => Home(),
               ));

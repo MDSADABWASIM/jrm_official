@@ -36,7 +36,7 @@ class Auth implements BaseAuth {
       idToken: _gsa.idToken,
     );
     final FirebaseUser user = await _auth.signInWithCredential(credential);
-
+      
     return user;
   }
 
