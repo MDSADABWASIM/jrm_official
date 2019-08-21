@@ -23,14 +23,14 @@ class _SplashScreenState extends State<SplashScreen> {
       if (user != null) {
         AppData.id = user.uid;
         Navigator.of(context).pushReplacement(
-            new MaterialPageRoute(builder: (context) => Home()));
+            new CupertinoPageRoute(builder: (context) => Home()));
       } else {
         Navigator.of(context).pushReplacement(
-            new MaterialPageRoute(builder: (context) => Login()));
+            new CupertinoPageRoute(builder: (context) => Login()));
       }
     }else{
          Navigator.of(context).pushReplacement(
-            new MaterialPageRoute(builder: (context) => OnBoardingCircle()));
+            new CupertinoPageRoute(builder: (context) => OnBoardingCircle()));
     }
   }
 
