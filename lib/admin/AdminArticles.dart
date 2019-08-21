@@ -109,9 +109,7 @@ class _AdminArticlesPageState extends State<AdminArticlesPage> {
           .limit(length)
           .snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData)
-          return Center(child: CircularProgressIndicator());
-        else if (snapshot.data.documents.length == 0)
+        if (!snapshot.hasData || snapshot.data.documents.length==0)
           return Center(child: CircularProgressIndicator());
         else
           snapshot.data.documents.length < length
@@ -137,9 +135,7 @@ class _AdminArticlesPageState extends State<AdminArticlesPage> {
           .limit(length)
           .snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData)
-          return Center(child: CircularProgressIndicator());
-        else if (snapshot.data.documents.length == 0)
+         if (!snapshot.hasData || snapshot.data.documents.length==0)
           return Center(child: CircularProgressIndicator());
         else
           snapshot.data.documents.length < length
@@ -165,9 +161,7 @@ class _AdminArticlesPageState extends State<AdminArticlesPage> {
           .limit(length)
           .snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData)
-          return Center(child: CircularProgressIndicator());
-        else if (snapshot.data.documents.length == 0)
+          if (!snapshot.hasData || snapshot.data.documents.length==0)
           return Center(child: CircularProgressIndicator());
         else
           snapshot.data.documents.length < length

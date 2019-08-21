@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:cloud_firestore/cloud_firestore.dart' ;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -64,20 +64,14 @@ class _ArticleHomePageState extends State<ArticleHomePage>
         });
       }
     });
-  _getUnReadMSG();
+    _getUnReadMSG();
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
     return new ResideMenu.scaffold(
-      decoration: new BoxDecoration(
-        color: Color(0xFF2d3447)
-          // image: new DecorationImage(
-          //     image: new AssetImage("assets/kaaba.png"), fit: BoxFit.cover)
-              ),
-      
+      decoration: new BoxDecoration(color: Color(0xFF2d3447)),
       controller: _menuController,
       leftScaffold: _menuScaffold(),
       child: Container(
@@ -292,7 +286,7 @@ class _ArticleHomePageState extends State<ArticleHomePage>
                                     height: 20.0,
                                   ),
                                   GestureDetector(
-                                    onTap: () async{
+                                    onTap: () async {
                                       if (await canLaunch(snap['url']))
                                         launch(snap['url']);
                                     },
@@ -377,61 +371,61 @@ class _ArticleHomePageState extends State<ArticleHomePage>
     );
   }
 
-MenuScaffold _menuScaffold(){
-  return new MenuScaffold(
-        header: new ConstrainedBox(
-          constraints: new BoxConstraints(maxHeight: 80.0, maxWidth: 100.0),
-          child: new CircleAvatar(
-            backgroundImage: new AssetImage('assets/other.png'),
-            radius: 30.0,
+  MenuScaffold _menuScaffold() {
+    return new MenuScaffold(
+      header: new ConstrainedBox(
+        constraints: new BoxConstraints(maxHeight: 80.0, maxWidth: 100.0),
+        child: new CircleAvatar(
+          backgroundImage: new AssetImage('assets/other.png'),
+          radius: 30.0,
+        ),
+      ),
+      children: <Widget>[
+        Material(
+          color: Color(0xFF2d3447),
+          child: new InkWell(
+            child: ResideMenuItem(
+              title: 'Settings',
+              icon: const Icon(Icons.settings, color: Colors.white),
+            ),
+            onTap: () {
+              Navigator.of(context).push(CupertinoPageRoute(
+                builder: (context) => Setting(),
+              ));
+            },
           ),
         ),
-        children: <Widget>[
-           Material(
-            color:Color(0xFF2d3447),
-            child: new InkWell(
-              child: ResideMenuItem(
-                title: 'Settings',
-                icon: const Icon(Icons.settings, color: Colors.white),
-              ),
-              onTap: () {
-                Navigator.of(context).push(CupertinoPageRoute(
-                  builder: (context) => Setting(),
-                ));
-              },
+        Material(
+          color: Color(0xFF2d3447),
+          child: new InkWell(
+            child: ResideMenuItem(
+              title: 'Shajra List',
+              icon: const Icon(Icons.library_books, color: Colors.white),
             ),
+            onTap: () {
+              Navigator.of(context).push(CupertinoPageRoute(
+                builder: (context) => Shajra(),
+              ));
+            },
           ),
-            Material(
-              color: Color(0xFF2d3447),
-            child: new InkWell(
-              child: ResideMenuItem(
-                title: 'Shajra List',
-                icon: const Icon(Icons.library_books, color: Colors.white),
-              ),
-              onTap: () {
-                Navigator.of(context).push(CupertinoPageRoute(
-                  builder: (context) => Shajra(),
-                ));
-              },
+        ),
+        Material(
+          color: Color(0xFF2d3447),
+          child: new InkWell(
+            child: ResideMenuItem(
+              title: 'About App Dev',
+              icon: const Icon(Icons.person_outline, color: Colors.white),
             ),
+            onTap: () {
+              Navigator.of(context).push(CupertinoPageRoute(
+                builder: (context) => AboutDev(),
+              ));
+            },
           ),
-           Material(
-             color:Color(0xFF2d3447),
-            child: new InkWell(
-              child: ResideMenuItem(
-                title: 'About App Dev',
-                icon: const Icon(Icons.person_outline, color: Colors.white),
-              ),
-              onTap: () {
-                Navigator.of(context).push(CupertinoPageRoute(
-                  builder: (context) => AboutDev(),
-                ));
-              },
-            ),
-          ),
-          Material(
-              color: Color(0xFF2d3447),
-            child: new InkWell(
+        ),
+        Material(
+          color: Color(0xFF2d3447),
+          child: new InkWell(
               child: ResideMenuItem(
                 title: 'About JRM',
                 icon: const Icon(Icons.location_city, color: Colors.white),
@@ -439,28 +433,31 @@ MenuScaffold _menuScaffold(){
               onTap: () {
                 Navigator.of(context).push(CupertinoPageRoute(
                   builder: (context) => AboutJrm(),
-                ));}
+                ));
+              }),
+        ),
+        Material(
+          color: Color(0xFF2d3447),
+          child: new InkWell(
+            child: ResideMenuItem(
+              title: 'Share the App',
+              icon: const Icon(Icons.share, color: Colors.white),
             ),
+            onTap: () => _sharer(),
           ),
-          Material(
-              color: Color(0xFF2d3447),
-            child: new InkWell(
-              child: ResideMenuItem(
-                title: 'Share the App',
-                icon: const Icon(Icons.share, color: Colors.white),
+        ),
+        Material(
+          color: Color(0xFF2d3447),
+          child: ListTile(
+              leading: Padding(
+                padding: const EdgeInsets.only(left: 22.0),
+                child: const Icon(Icons.message, color: Colors.white),
               ),
-              onTap: () => _sharer(),
-            ),
-          ),
-             Material(
-                color:Color(0xFF2d3447),
-                            child: ListTile(
-                 leading:  Padding(
-                   padding: const EdgeInsets.only(left:22.0),
-                   child: const Icon(Icons.message, color: Colors.white),
-                 ),
-            title: Row(children: [
-                Text("    Messages",style: TextStyle(color: Colors.white, fontSize: 15.0),),
+              title: Row(children: [
+                Text(
+                  "    Messages",
+                  style: TextStyle(color: Colors.white, fontSize: 15.0),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0),
                   child: CircleAvatar(
@@ -471,18 +468,18 @@ MenuScaffold _menuScaffold(){
                         style: TextStyle(color: Colors.black, fontSize: 12.0),
                       )),
                 )
-            ]),
-            onTap: () {
-                  Navigator.of(context).push(CupertinoPageRoute(
-                    builder: (context) => AppChat(),
-                  ));}
-               ),
-             ),
-        ],
-      );
-}
+              ]),
+              onTap: () {
+                Navigator.of(context).push(CupertinoPageRoute(
+                  builder: (context) => AppChat(),
+                ));
+              }),
+        ),
+      ],
+    );
+  }
 
- _getUnReadMSG() async {
+  _getUnReadMSG() async {
     final msgRef = FirebaseDatabase.instance
         .reference()
         .child(AppData.messagesDB)
@@ -502,11 +499,10 @@ MenuScaffold _menuScaffold(){
         }
       }
 
-      if (msgCount > 0) {
-      }
+      if (msgCount > 0) {}
     });
   }
-    }
+}
 
 class CardScrollWidget extends StatelessWidget {
   final currentPage;
