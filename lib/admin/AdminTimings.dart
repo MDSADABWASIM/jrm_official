@@ -34,9 +34,6 @@ class PostTimingsState extends State<PostTimings> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      persistentFooterButtons: <Widget>[
-        Container(color: Colors.orange[50], height: 30)
-      ],
       backgroundColor: Colors.orange[50],
       key: _scaffoldKey,
       appBar: AppBar(
