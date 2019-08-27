@@ -40,11 +40,11 @@ class SettingState extends State<Setting> {
 
   @override
   void initState() {
-   flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
     _getSharedprefs();
     _getVersion();
     _getTimings();
-   
+
     var initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOS = IOSInitializationSettings(
@@ -93,7 +93,7 @@ class SettingState extends State<Setting> {
       _divider(),
       _listItem('Privacy policy', PrivacyPolicy(), context),
       _divider(),
-         _listItem('Terms and conditions', Terms(), context),
+      _listItem('Terms and conditions', Terms(), context),
       _divider(),
       SizedBox(height: 50),
       GestureDetector(
@@ -111,7 +111,7 @@ class SettingState extends State<Setting> {
   _getTimings() async {
     QuerySnapshot snapshot =
         await Firestore.instance.collection('Timings').getDocuments();
-     if(snapshot.documents.length!=null && snapshot.documents.length!=0)
+    if (snapshot.documents.length != null && snapshot.documents.length != 0)
       _getExactTimings(snapshot);
   }
 
@@ -240,7 +240,7 @@ class SettingState extends State<Setting> {
         if (azanNotificationEnabled) {
           _saveSharedprefs('AzanNotifs', azanNotificationEnabled);
           _showDailyAtFazarTime();
-           _showDailyAtZoharTime();
+          _showDailyAtZoharTime();
           _showDailyAtAsarTime();
           _showDailyAtMaghribTime();
           _showDailyAtIsaTime();
@@ -285,7 +285,7 @@ class SettingState extends State<Setting> {
                       style: TextStyle(color: Colors.blue),
                       text: 'Send an E-mail' + "\n\n",
                       url:
-                          'mailto:jrm78692@gmail.com?subject=Feedback&body=Feedback for App'),
+                          'mailto:jrm78692@gmail.com?subject=Business Query&body=Business query from JRM App'),
                 ])))
       ],
     );
@@ -325,7 +325,7 @@ class SettingState extends State<Setting> {
   }
 
   Future<void> _showDailyAtFazarTime() async {
-    var time = Time(fazarHour,fazarMinute, 0);
+    var time = Time(fazarHour, fazarMinute, 0);
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'repeatDailyAtTime channel id',
         'repeatDailyAtTime channel name',
@@ -333,12 +333,17 @@ class SettingState extends State<Setting> {
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.showDailyAtTime(1, 'Fazar namaz is here',
-        'It\'s time to wake up for fazar namaz', time, platformChannelSpecifics,payload: 'Wake up and start your day with namaz');
+    await flutterLocalNotificationsPlugin.showDailyAtTime(
+        1,
+        'Fazar namaz is here',
+        'It\'s time to wake up for fazar namaz',
+        time,
+        platformChannelSpecifics,
+        payload: 'Wake up and start your day with namaz');
   }
 
-    Future<void> _showDailyAtZoharTime() async {
-    var time = Time(zoharHour,zoharMinute, 0);
+  Future<void> _showDailyAtZoharTime() async {
+    var time = Time(zoharHour, zoharMinute, 0);
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'repeatDailyAtTime channel id',
         'repeatDailyAtTime channel name',
@@ -346,12 +351,17 @@ class SettingState extends State<Setting> {
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.showDailyAtTime(2, 'Zohar namaz is here',
-        'It\'s time for zohar namaz', time, platformChannelSpecifics,payload: 'It is zohar time, do not forget for namaz');
+    await flutterLocalNotificationsPlugin.showDailyAtTime(
+        2,
+        'Zohar namaz is here',
+        'It\'s time for zohar namaz',
+        time,
+        platformChannelSpecifics,
+        payload: 'It is zohar time, do not forget for namaz');
   }
 
-    Future<void> _showDailyAtAsarTime() async {
-    var time = Time(asarHour,asarMinute, 0);
+  Future<void> _showDailyAtAsarTime() async {
+    var time = Time(asarHour, asarMinute, 0);
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'repeatDailyAtTime channel id',
         'repeatDailyAtTime channel name',
@@ -359,12 +369,17 @@ class SettingState extends State<Setting> {
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.showDailyAtTime(3, 'Asar namaz is here',
-        'Don\'t forget to pray on asar', time, platformChannelSpecifics,payload: 'Even if you are busy, just do the Asar prayer on time. ');
+    await flutterLocalNotificationsPlugin.showDailyAtTime(
+        3,
+        'Asar namaz is here',
+        'Don\'t forget to pray on asar',
+        time,
+        platformChannelSpecifics,
+        payload: 'Even if you are busy, just do the Asar prayer on time. ');
   }
 
-    Future<void> _showDailyAtMaghribTime() async {
-    var time = Time(maghribHour,maghribMinute, 0);
+  Future<void> _showDailyAtMaghribTime() async {
+    var time = Time(maghribHour, maghribMinute, 0);
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'repeatDailyAtTime channel id',
         'repeatDailyAtTime channel name',
@@ -372,12 +387,17 @@ class SettingState extends State<Setting> {
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.showDailyAtTime(4, 'Maghrib time is here',
-        'Hurry up for maghrib namaz', time, platformChannelSpecifics,payload: 'Do not forget to do maghrib prayer.');
+    await flutterLocalNotificationsPlugin.showDailyAtTime(
+        4,
+        'Maghrib time is here',
+        'Hurry up for maghrib namaz',
+        time,
+        platformChannelSpecifics,
+        payload: 'Do not forget to do maghrib prayer.');
   }
 
-    Future<void> _showDailyAtIsaTime() async {
-    var time = Time(isaHour,isaMinute, 0);
+  Future<void> _showDailyAtIsaTime() async {
+    var time = Time(isaHour, isaMinute, 0);
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'repeatDailyAtTime channel id',
         'repeatDailyAtTime channel name',
@@ -386,7 +406,8 @@ class SettingState extends State<Setting> {
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.showDailyAtTime(5, 'It\'s Isa time',
-        'It\'s time  for isa namaz', time, platformChannelSpecifics,payload: 'Do Isa namaz in time.');
+        'It\'s time  for isa namaz', time, platformChannelSpecifics,
+        payload: 'Do Isa namaz in time.');
   }
 
   Future<void> _showWeeklyAtDayAndTime() async {
@@ -404,10 +425,10 @@ class SettingState extends State<Setting> {
         'Do not forget for namaz',
         Day.Friday,
         time,
-        platformChannelSpecifics,payload: 'Jumma mubarak, remember us in your Dua.');
+        platformChannelSpecifics,
+        payload: 'Jumma mubarak, remember us in your Dua.');
   }
 
- 
   Future<void> onDidReceiveLocalNotification(
       int id, String title, String body, String payload) async {
     await showDialog(
@@ -441,39 +462,37 @@ class _LinkTextSpan extends TextSpan {
               });
 }
 
+// Future<String> _downloadAndSaveImage(String url, String fileName) async {
+//   var directory = await getApplicationDocumentsDirectory();
+//   var filePath = '${directory.path}/$fileName';
+//   var response = await http.get(url);
+//   var file = File(filePath);
+//   await file.writeAsBytes(response.bodyBytes);
+//   return filePath;
+// }
 
-
- // Future<String> _downloadAndSaveImage(String url, String fileName) async {
-  //   var directory = await getApplicationDocumentsDirectory();
-  //   var filePath = '${directory.path}/$fileName';
-  //   var response = await http.get(url);
-  //   var file = File(filePath);
-  //   await file.writeAsBytes(response.bodyBytes);
-  //   return filePath;
-  // }
-
-  // Future<void> _showBigPictureNotificationHideExpandedLargeIcon() async {
-  //   var largeIconPath = await _downloadAndSaveImage(
-  //       'http://via.placeholder.com/48x48', 'largeIcon');
-  //   var bigPicturePath = await _downloadAndSaveImage(
-  //       'http://via.placeholder.com/400x800', 'bigPicture');
-  //   var bigPictureStyleInformation = BigPictureStyleInformation(
-  //       bigPicturePath, BitmapSource.FilePath,
-  //       hideExpandedLargeIcon: true,
-  //       contentTitle: 'overridden <b>big</b> content title',
-  //       htmlFormatContentTitle: true,
-  //       summaryText: 'summary <i>text</i>',
-  //       htmlFormatSummaryText: true);
-  //   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-  //       'big text channel id',
-  //       'big text channel name',
-  //       'big text channel description',
-  //       largeIcon: largeIconPath,
-  //       largeIconBitmapSource: BitmapSource.FilePath,
-  //       style: AndroidNotificationStyle.BigPicture,
-  //       styleInformation: bigPictureStyleInformation);
-  //   var platformChannelSpecifics =
-  //       NotificationDetails(androidPlatformChannelSpecifics, null);
-  //   await flutterLocalNotificationsPlugin.show(
-  //       0, 'big text title', 'silent body', platformChannelSpecifics);
-  // }
+// Future<void> _showBigPictureNotificationHideExpandedLargeIcon() async {
+//   var largeIconPath = await _downloadAndSaveImage(
+//       'http://via.placeholder.com/48x48', 'largeIcon');
+//   var bigPicturePath = await _downloadAndSaveImage(
+//       'http://via.placeholder.com/400x800', 'bigPicture');
+//   var bigPictureStyleInformation = BigPictureStyleInformation(
+//       bigPicturePath, BitmapSource.FilePath,
+//       hideExpandedLargeIcon: true,
+//       contentTitle: 'overridden <b>big</b> content title',
+//       htmlFormatContentTitle: true,
+//       summaryText: 'summary <i>text</i>',
+//       htmlFormatSummaryText: true);
+//   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+//       'big text channel id',
+//       'big text channel name',
+//       'big text channel description',
+//       largeIcon: largeIconPath,
+//       largeIconBitmapSource: BitmapSource.FilePath,
+//       style: AndroidNotificationStyle.BigPicture,
+//       styleInformation: bigPictureStyleInformation);
+//   var platformChannelSpecifics =
+//       NotificationDetails(androidPlatformChannelSpecifics, null);
+//   await flutterLocalNotificationsPlugin.show(
+//       0, 'big text title', 'silent body', platformChannelSpecifics);
+// }
