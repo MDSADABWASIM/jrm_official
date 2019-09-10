@@ -128,6 +128,7 @@ class _HomeState extends State<Home> {
     var connectionStatus = Provider.of<ConnectivityStatus>(context);
      var childButtons = List<UnicornButton>();
 
+//Added floatingAction buttons.
     childButtons.add(UnicornButton(
         hasLabel: true,
         labelText: "become a Jrm member",
